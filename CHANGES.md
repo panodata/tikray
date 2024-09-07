@@ -2,6 +2,49 @@
 
 ## Unreleased
 - Added `BucketTransformation`, a minimal transformation engine
+- Added Zyp Treatments, a slightly tailored transformation subsystem
+
+## 2024/09/02 v0.0.14
+- Replace poor man's relation name quoting with implementation
+  `quote_relation_name` from `sqlalchemy-cratedb` package.
+- DynamoDB: Add special decoding for varied lists, storing them into a separate
+  `OBJECT(IGNORED)` column in CrateDB
+- DynamoDB: Improve `to_sql()` to accept list of records
+
+## 2024/08/27 v0.0.13
+- DMS/DynamoDB: Use parameterized SQL WHERE clauses instead of inlining values
+
+## 2024/08/26 v0.0.12
+- DMS/DynamoDB/MongoDB: Use SQL with parameters instead of inlining values
+
+## 2024/08/23 v0.0.11
+- DynamoDB: Fix serializing OBJECT and ARRAY representations to CrateDB
+
+## 2024/08/22 v0.0.10
+- DynamoDB: Fix `Map` representation to CrateDB.
+
+## 2024/08/22 v0.0.9
+- DynamoDB: Fix `String Set` and `Number Set` representation for CrateDB
+- DynamoDB: Fix serializing empty strings
+
+## 2024/08/20 v0.0.8
+- DynamoDB: Apply rough type evaluation and dispatching when computing
+  values for `UPDATE` statements
+
+## 2024/08/17 v0.0.7
+- DynamoDB: Fixed a syntax issue with `text` data type in `UPDATE` statements
+
+## 2024/08/16 v0.0.6
+- Changed `UPDATE` statements from DMS not to write the entire `data`
+  column. This allows defining primary keys on the sink table.
+
+## 2024/08/16 v0.0.5
+- Changed `UPDATE` statements from DynamoDB not to write the entire `data`
+  column. This allows defining primary keys on the sink table.
+
+## 2024/08/14 v0.0.4
+- Added Zyp Transformations, a minimal transformation engine
+>>>>>>> f9d5926 (Zyp Treatments: A slightly tailored transformation subsystem)
   based on JSON Pointer (RFC 6901).
 - Added documentation using Sphinx and Read the Docs
 
