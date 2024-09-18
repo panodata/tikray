@@ -2,6 +2,10 @@
 
 ## Unreleased
 - Added `BucketTransformation`, a minimal transformation engine
+- MongoDB: Added `MongoDBFullLoadTranslator` and `MongoDBCrateDBConverter`
+- Zyp: Fixed execution of collection transformation
+
+## 2024/09/10 v0.0.15
 - Added Zyp Treatments, a slightly tailored transformation subsystem
 
 ## 2024/09/02 v0.0.14
