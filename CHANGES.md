@@ -1,7 +1,10 @@
 # Changelog
 
 ## Unreleased
-- Added `BucketTransformation`, a minimal transformation engine
+- MongoDB: Fixed edge case when decoding MongoDB Extended JSON elements
+- Zyp: Added capability to skip rule evaluation when `disabled: true`
+
+## 2024/09/19 v0.0.16
 - MongoDB: Added `MongoDBFullLoadTranslator` and `MongoDBCrateDBConverter`
 - Zyp: Fixed execution of collection transformation
 - Zyp: Added software test and documentation about flattening lists
