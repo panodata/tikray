@@ -117,10 +117,30 @@ def test_moksha_jq_cast_dict():
     Verify type casting using moksha/jq.
     """
 
-    data_in = [{"data": [{"abc": 123}, {"abc": 456}, {"abc": {"id": 789}}]}]
-    data_out = [{"data": [{"abc": {"id": 123}}, {"abc": {"id": 456}}, {"abc": {"id": 789}}]}]
+    data_in = [
+        {
+            "data": [
+                {"abc": 123},
+                {"abc": 456},
+                {"abc": {"id": 789}},
+                {},
+                {"def": 999},
+            ]
+        },
+    ]
+    data_out = [
+        {
+            "data": [
+                {"abc": {"id": 123}},
+                {"abc": {"id": 456}},
+                {"abc": {"id": 789}},
+                {},
+                {"def": 999},
+            ]
+        },
+    ]
 
-    transformation = MokshaTransformation().jq('.[] |= (.data[].abc |= to_object({"key": "id"}))')
+    transformation = MokshaTransformation().jq('.[] |= (.data[].abc |= to_object({"key": "id", "zap": true}))')
     assert transformation.apply(data_in) == data_out
 
 
