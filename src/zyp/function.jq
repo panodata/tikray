@@ -1,5 +1,5 @@
 # Support functions for Zyp Transformations
-# https://commons-codec.readthedocs.io/zyp/
+# https://zyp.readthedocs.io/
 
 def to_array:
     # Convert element to array if it isn't an array already.

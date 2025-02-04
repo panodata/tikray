@@ -1,1 +1,6 @@
+.coverage
 .idea
+__pycache__
+coverage.xml
+*.egg-info
+*.pyc

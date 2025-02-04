@@ -52,7 +52,6 @@ within the header sections of relevant files.
 
 
 
-[Apache Commons Codec]: https://commons.apache.org/proper/zyp/
 [Change Data Capture (CDC)]: https://en.wikipedia.org/wiki/Change_data_capture
 [documentation]: https://zyp.readthedocs.io/
 [examples]: https://github.com/panodata/zyp/tree/main/examples

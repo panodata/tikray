@@ -96,7 +96,7 @@ def test_collection_transformation_regular_load_and_apply():
     """
     Verify rule-based transformations can be loaded and applied.
     """
-    payload = Path("tests/zyp/transformation-collection.yaml").read_text()
+    payload = Path("tests/transformation-collection.yaml").read_text()
     transformation = CollectionTransformation.from_yaml(payload)
     result = transformation.apply(deepcopy(ComplexRecipe.data_in))
     assert result == ComplexRecipe.data_out
@@ -106,7 +106,7 @@ def test_collection_transformation_treatment_load_and_apply():
     """
     Verify collection transformation with treatment can be loaded and applied.
     """
-    payload = Path("tests/zyp/transformation-collection-treatment.yaml").read_text()
+    payload = Path("tests/transformation-collection-treatment.yaml").read_text()
     transformation = CollectionTransformation.from_yaml(payload)
     result = transformation.apply(deepcopy(ComplexRecipe.data_in))
     assert result == {

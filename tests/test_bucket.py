@@ -290,7 +290,7 @@ def test_bucket_transformation_load_and_apply():
     """
     Verify transformation can be loaded from JSON and applied again.
     """
-    payload = Path("tests/zyp/transformation-bucket.json").read_text()
+    payload = Path("tests/transformation-bucket.json").read_text()
     transformation = BucketTransformation.from_json(payload)
     result = transformation.apply(deepcopy(BasicReading.ingress))
     assert result == BasicReading.egress

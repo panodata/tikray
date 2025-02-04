@@ -3,7 +3,6 @@ import re
 
 import pytest
 from jmespath.exceptions import ParseError
-
 from zyp.model.moksha import MokshaRule, MokshaTransformation
 
 
