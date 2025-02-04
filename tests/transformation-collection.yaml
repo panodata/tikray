@@ -1,6 +1,6 @@
 meta:
   version: 1
-  type: zyp-collection
+  type: loko-collection
 pre:
   rules:
   - expression: records[?not_null(meta.location) && !starts_with(meta.location, 'N')]

@@ -1,8 +1,8 @@
 import sys
 
 import pytest
-from zyp.model.collection import CollectionAddress, CollectionTransformation
-from zyp.model.project import TransformationProject
+from loko.model.collection import CollectionAddress, CollectionTransformation
+from loko.model.project import TransformationProject
 
 
 @pytest.mark.skipif(sys.version_info < (3, 9), reason="Does not work on Python 3.8 and earlier")

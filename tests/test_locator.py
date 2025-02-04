@@ -1,6 +1,6 @@
 import pytest
 from jsonpointer import JsonPointer, JsonPointerException
-from zyp.util.locator import swap_node
+from loko.util.locator import swap_node
 
 
 def test_swap_node_not_found_raise():

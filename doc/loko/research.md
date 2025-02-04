@@ -1,5 +1,5 @@
-(zyp-research)=
-# Zyp Research
+(research)=
+# Research
 
 ## Toolbox
 - jq, jsonpointer, jmespath, funcy, morph, boltons, toolz

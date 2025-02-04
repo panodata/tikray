@@ -1,5 +1,5 @@
-# Support functions for Zyp Transformations
-# https://zyp.readthedocs.io/
+# Support functions for Loko Transformations
+# https://loko.readthedocs.io/
 
 def to_array:
     # Convert element to array if it isn't an array already.

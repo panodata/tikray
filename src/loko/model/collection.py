@@ -2,10 +2,10 @@ import typing as t
 
 from attrs import define
 
-from zyp.model.base import Collection, DictOrList, Dumpable, Metadata, SchemaDefinition
-from zyp.model.bucket import BucketTransformation
-from zyp.model.moksha import MokshaTransformation
-from zyp.model.treatment import Treatment
+from loko.model.base import Collection, DictOrList, Dumpable, Metadata, SchemaDefinition
+from loko.model.bucket import BucketTransformation
+from loko.model.moksha import MokshaTransformation
+from loko.model.treatment import Treatment
 
 
 @define(frozen=True)
@@ -16,7 +16,7 @@ class CollectionAddress:
 
 @define
 class CollectionTransformation(Dumpable):
-    meta: Metadata = Metadata(version=1, type="zyp-collection")
+    meta: Metadata = Metadata(version=1, type="loko-collection")
     address: t.Union[CollectionAddress, None] = None
     schema: t.Union[SchemaDefinition, None] = None
     pre: t.Union[MokshaTransformation, None] = None

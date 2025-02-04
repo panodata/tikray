@@ -1,25 +1,25 @@
-# Zyp
+# Loko
 
-[![Tests](https://github.com/panodata/zyp/actions/workflows/tests.yml/badge.svg)](https://github.com/panodata/zyp/actions/workflows/tests.yml)
-[![Coverage](https://codecov.io/gh/panodata/zyp/branch/main/graph/badge.svg)](https://app.codecov.io/gh/panodata/zyp)
-[![Build status (documentation)](https://readthedocs.org/projects/zyp/badge/)](https://cratedb.com/docs/zyp/)
-[![PyPI Version](https://img.shields.io/pypi/v/zyp.svg)](https://pypi.org/project/zyp/)
-[![Python Version](https://img.shields.io/pypi/pyversions/zyp.svg)](https://pypi.org/project/zyp/)
-[![PyPI Downloads](https://pepy.tech/badge/zyp/month)](https://pepy.tech/project/zyp/)
-[![Status](https://img.shields.io/pypi/status/zyp.svg)](https://pypi.org/project/zyp/)
-[![License](https://img.shields.io/pypi/l/zyp.svg)](https://pypi.org/project/zyp/)
+[![Tests](https://github.com/panodata/loko/actions/workflows/tests.yml/badge.svg)](https://github.com/panodata/loko/actions/workflows/tests.yml)
+[![Coverage](https://codecov.io/gh/panodata/loko/branch/main/graph/badge.svg)](https://app.codecov.io/gh/panodata/loko)
+[![Build status (documentation)](https://readthedocs.org/projects/loko/badge/)](https://loko.readthedocs.io/)
+[![PyPI Version](https://img.shields.io/pypi/v/loko.svg)](https://pypi.org/project/loko/)
+[![Python Version](https://img.shields.io/pypi/pyversions/loko.svg)](https://pypi.org/project/loko/)
+[![PyPI Downloads](https://pepy.tech/badge/loko/month)](https://pepy.tech/project/loko/)
+[![Status](https://img.shields.io/pypi/status/loko.svg)](https://pypi.org/project/loko/)
+[![License](https://img.shields.io/pypi/l/loko.svg)](https://pypi.org/project/loko/)
 
 ## About
 
-Zyp is a generic and compact **transformation engine** written in Python, for data
+Loko is a generic and compact **transformation engine** written in Python, for data
 decoding, encoding, conversion, translation, transformation, and cleansing purposes,
 to be used as a pipeline element for data pre- and/or post-processing.
 
 ## Installation
-The package is available from [PyPI] at [zyp].
+The package is available from [PyPI] at [loko].
 To install the most recent version, invoke:
 ```shell
-uv pip install --upgrade 'zyp'
+uv pip install --upgrade 'loko'
 ```
 
 ## Usage
@@ -37,12 +37,14 @@ vendoring and building upon.
 See [prior art] and [research].
 
 ### Contributing
-The `zyp` package is an open source project, and is
+The `loko` package is an open source project, and is
 [managed on GitHub]. The project is still in its infancy, and
 we appreciate contributions of any kind.
 
 ### Etymology
-With kudos to [Kris Zyp] for conceiving [JSON Pointer].
+Loko means "transform" in the [Luo language]. 
+A previous version used the name `zyp`,
+with kudos to [Kris Zyp] for conceiving [JSON Pointer].
 
 ### License
 The project uses the LGPLv3 license for the whole ensemble. However, individual
@@ -53,12 +55,13 @@ within the header sections of relevant files.
 
 
 [Change Data Capture (CDC)]: https://en.wikipedia.org/wiki/Change_data_capture
-[documentation]: https://zyp.readthedocs.io/
-[examples]: https://github.com/panodata/zyp/tree/main/examples
+[documentation]: https://loko.readthedocs.io/
+[examples]: https://github.com/panodata/loko/tree/main/examples
 [JSON Pointer]: https://datatracker.ietf.org/doc/html/rfc6901
 [Kris Zyp]: https://github.com/kriszyp
-[managed on GitHub]: https://github.com/panodata/zyp
-[prior art]: https://zyp.readthedocs.io/prior-art.html
+[Luo language]: https://en.wikipedia.org/wiki/Luo_language
+[managed on GitHub]: https://github.com/panodata/loko
+[prior art]: https://loko.readthedocs.io/prior-art.html
 [PyPI]: https://pypi.org/
-[research]: https://zyp.readthedocs.io/research.html
-[zyp]: https://pypi.org/project/zyp/
+[research]: https://loko.readthedocs.io/research.html
+[loko]: https://pypi.org/project/loko/

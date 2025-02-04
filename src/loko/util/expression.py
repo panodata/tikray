@@ -11,11 +11,11 @@ import jmespath
 import jq
 import transon
 
-from zyp.model.bucket import MokshaTransformer, TransonTemplate
+from loko.model.bucket import MokshaTransformer, TransonTemplate
 
 # TODO: Is there a better way to configure jq using a custom search path
 #       instead of injecting the `include` statement each time again?
-jq_functions_path = resource_files("zyp")
+jq_functions_path = resource_files("loko")
 jq_functions_import = f'include "function" {{"search": "{jq_functions_path}"}};'
 
 

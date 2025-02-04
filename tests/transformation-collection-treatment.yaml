@@ -1,5 +1,5 @@
 meta:
   version: 1
-  type: zyp-collection
+  type: loko-collection
 treatment:
   ignore_complex_lists: true

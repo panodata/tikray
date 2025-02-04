@@ -7,7 +7,7 @@ from copy import deepcopy
 
 import pytest
 from jmespath.exceptions import ParseError
-from zyp.model.moksha import MokshaRule, MokshaTransformation
+from loko.model.moksha import MokshaRule, MokshaTransformation
 
 
 def test_moksha_jq_idempotency():

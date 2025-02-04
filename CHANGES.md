@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Renamed package to `loko`
 
 ## 2024/09/26 v0.0.19
 - Zyp/Moksha: Improve error reporting when rule evaluation fails

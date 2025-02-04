@@ -1,4 +1,4 @@
-# Zyp Transformations
+# Loko Transformations
 
 ## About
 A data model and implementation for a compact transformation engine written
@@ -17,14 +17,14 @@ implemented using [attrs] and [cattrs].
     Well, it is written in Python. Fragments can be re-written in Rust, when applicable.
 :Immediate:
     Other ETL frameworks and concepts often need to first land your data in the target
-    system before applying subsequent transformations. Zyp is working directly within
+    system before applying subsequent transformations. Loko is working directly within
     the data pipeline, before data is inserted into the target system.
 
 ## Synopsis I
 A basic transformation example for individual data records.
 
 ```python
-from zyp.model.bucket import BucketTransformation, FieldRenamer, ValueConverter
+from loko.model.bucket import BucketTransformation, FieldRenamer, ValueConverter
 
 # Consider a slightly messy collection of records.
 data_in = [
@@ -102,12 +102,12 @@ Other than those special rules, the fundamental ones to re-shape the data are:
 - On each record, adjust the data types of the `id` and `value` fields.
 - Postprocess collection, applying a custom scaling factor to the `value` field.
 
-Zyp let's you concisely write those rules down, using the Python language.
+Loko let's you concisely write those rules down, using the Python language.
 
 ```python
-from zyp.model.bucket import BucketTransformation, FieldRenamer, ValueConverter
-from zyp.model.collection import CollectionTransformation
-from zyp.model.moksha import MokshaTransformation
+from loko.model.bucket import BucketTransformation, FieldRenamer, ValueConverter
+from loko.model.collection import CollectionTransformation
+from loko.model.moksha import MokshaTransformation
 
 transformation = CollectionTransformation(
     pre=MokshaTransformation().jmes("records[?not_null(meta.location) && !starts_with(meta.location, 'N')]"),
@@ -122,7 +122,7 @@ transformation = CollectionTransformation(
 
 data_out = transformation.apply(data_in)
 ```
-Alternatively, serialize the `zyp-collection` transformation description,
+Alternatively, serialize the `loko-collection` transformation description,
 for example into YAML format.
 ```python
 print(transformation.to_yaml())
@@ -130,7 +130,7 @@ print(transformation.to_yaml())
 ```yaml
 meta:
   version: 1
-  type: zyp-collection
+  type: loko-collection
 pre:
   rules:
   - expression: records[?not_null(meta.location) && !starts_with(meta.location, 'N')]
@@ -164,7 +164,9 @@ post:
 - ... and many more. Thanks for the inspirations.
 
 ## Etymology
-With kudos to [Kris Zyp] for conceiving [JSON Pointer].
+Loko means "transform" in the [Luo language]. 
+A previous version used the name `zyp`,
+with kudos to [Kris Zyp] for conceiving [JSON Pointer].
 
 ## More
 ```{toctree}
@@ -183,6 +185,7 @@ backlog
 [Kris Zyp]: https://github.com/kriszyp
 [JMESPath]: https://jmespath.org/
 [JSON Pointer]: https://datatracker.ietf.org/doc/html/rfc6901
+[Luo language]: https://en.wikipedia.org/wiki/Luo_language
 [Meltano Inline Data Mapping]: https://docs.meltano.com/guide/mappers/
 [Meltano Inline Stream Maps]: https://sdk.meltano.com/en/latest/stream_maps.html
 [PipelineWise Transformations]: https://transferwise.github.io/pipelinewise/user_guide/transformations.html

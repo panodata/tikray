@@ -2,8 +2,8 @@ import typing as t
 
 from attrs import define
 
-from zyp.model.bucket import ConverterBase
-from zyp.model.moksha import MokshaRule
+from loko.model.bucket import ConverterBase
+from loko.model.moksha import MokshaRule
 
 
 @define

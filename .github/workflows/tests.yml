@@ -49,7 +49,7 @@ jobs:
           pip install "setuptools>=64" --upgrade
 
           # Install package in editable mode.
-          pip install --use-pep517 --prefer-binary --editable=.[zyp,develop,test]
+          pip install --use-pep517 --prefer-binary --editable=.[develop,test]
 
       - name: Set timezone
         uses: szenius/set-timezone@v2.0
@@ -68,7 +68,7 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
           files: ./coverage.xml
-          flags: zyp
+          flags: main
           env_vars: OS,PYTHON
           name: codecov-umbrella
           fail_ci_if_error: false
