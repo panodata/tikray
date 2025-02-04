@@ -1,4 +1,4 @@
-from zyp.model.treatment import Treatment
+from loko.model.treatment import Treatment
 
 RECORD_IN = {
     "data": {

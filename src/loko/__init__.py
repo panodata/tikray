@@ -1,4 +1,4 @@
-from zyp.model import (
+from loko.model import (
     BucketTransformation,
     CollectionTransformation,
     FieldRenamer,

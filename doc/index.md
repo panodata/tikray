@@ -1,5 +1,5 @@
 (index)=
-# zyp
+# Loko
 
 [![CI][badge-tests]][project-tests]
 [![Coverage Status][badge-coverage]][project-codecov]
@@ -34,7 +34,7 @@
 
 cdc/index
 decode
-zyp/index
+loko/index
 ```
 
 ```{toctree}
@@ -60,20 +60,20 @@ backlog
 [Kotori]: https://kotori.readthedocs.io/
 [LorryStream]: https://lorrystream.readthedocs.io/
 
-[badge-coverage]: https://codecov.io/gh/panodata/zyp/branch/main/graph/badge.svg
-[badge-documentation]: https://img.shields.io/readthedocs/zyp
-[badge-downloads-per-month]: https://pepy.tech/badge/zyp/month
-[badge-license]: https://img.shields.io/github/license/panodata/zyp.svg
-[badge-package-version]: https://img.shields.io/pypi/v/zyp.svg
-[badge-python-versions]: https://img.shields.io/pypi/pyversions/zyp.svg
-[badge-status]: https://img.shields.io/pypi/status/zyp.svg
-[badge-tests]: https://github.com/panodata/zyp/actions/workflows/tests.yml/badge.svg
-[project-changelog]: https://zyp.readthedocs.io/changes.html
-[project-codecov]: https://codecov.io/gh/panodata/zyp
-[project-documentation]: https://zyp.readthedocs.io/
-[project-downloads]: https://pepy.tech/project/zyp/
-[project-issues]: https://github.com/panodata/zyp/issues
-[project-license]: https://github.com/panodata/zyp/blob/main/LICENSE
-[project-pypi]: https://pypi.org/project/zyp
-[project-repository]: https://github.com/panodata/zyp
-[project-tests]: https://github.com/panodata/zyp/actions/workflows/tests.yml
+[badge-coverage]: https://codecov.io/gh/panodata/loko/branch/main/graph/badge.svg
+[badge-documentation]: https://img.shields.io/readthedocs/loko
+[badge-downloads-per-month]: https://pepy.tech/badge/loko/month
+[badge-license]: https://img.shields.io/github/license/panodata/loko.svg
+[badge-package-version]: https://img.shields.io/pypi/v/loko.svg
+[badge-python-versions]: https://img.shields.io/pypi/pyversions/loko.svg
+[badge-status]: https://img.shields.io/pypi/status/loko.svg
+[badge-tests]: https://github.com/panodata/loko/actions/workflows/tests.yml/badge.svg
+[project-changelog]: https://loko.readthedocs.io/changes.html
+[project-codecov]: https://codecov.io/gh/panodata/loko
+[project-documentation]: https://loko.readthedocs.io/
+[project-downloads]: https://pepy.tech/project/loko/
+[project-issues]: https://github.com/panodata/loko/issues
+[project-license]: https://github.com/panodata/loko/blob/main/LICENSE
+[project-pypi]: https://pypi.org/project/loko
+[project-repository]: https://github.com/panodata/loko
+[project-tests]: https://github.com/panodata/loko/actions/workflows/tests.yml

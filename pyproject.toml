@@ -6,7 +6,7 @@ requires = [
 ]
 
 [project]
-name = "zyp"
+name = "loko"
 description = "A compact data transformation engine."
 readme = "README.md"
 keywords = [
@@ -33,7 +33,6 @@ keywords = [
   "unmarshal",
   "unserialize",
   "utility",
-  "zyp",
 ]
 license = { text = "LGPL 3, EUPL 1.2" }
 authors = [
@@ -133,11 +132,11 @@ optional-dependencies.test = [
   "pytest-mock<4",
 ]
 
-urls.Changelog = "https://zyp.readthedocs.io/changes.html"
-urls.Documentation = "https://zyp.readthedocs.io/"
-urls.Homepage = "https://zyp.readthedocs.io/"
-urls.Issues = "https://github.com/panodata/zyp/issues"
-urls.Repository = "https://github.com/panodata/zyp"
+urls.Changelog = "https://loko.readthedocs.io/changes.html"
+urls.Documentation = "https://loko.readthedocs.io/"
+urls.Homepage = "https://loko.readthedocs.io/"
+urls.Issues = "https://github.com/panodata/loko/issues"
+urls.Repository = "https://github.com/panodata/loko"
 
 [tool.black]
 line-length = 120
@@ -213,7 +212,7 @@ pythonpath = [
 testpaths = [
   "examples",
   "tests",
-  "zyp",
+  "loko",
 ]
 python_files = [
   "test_*.py",
@@ -234,7 +233,7 @@ source = [
 branch = false
 omit = [
   "tests/*",
-  "src/zyp/util/dictx.py",
+  "src/loko/util/dictx.py",
 ]
 
 [tool.coverage.report]
@@ -248,7 +247,7 @@ exclude_lines = [
 [tool.mypy]
 mypy_path = "src"
 packages = [
-  "zyp",
+  "loko",
 ]
 exclude = [
 ]

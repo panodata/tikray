@@ -1,7 +1,7 @@
-# Zyp Backlog
+# Backlog
 
 ## Iteration +1
-- Refactor module namespace to `zyp`
+- Refactor module namespace to `zyp`, then `loko`
 - Documentation
 - CLI interface
 - Apply to MongoDB Table Loader in CrateDB Toolkit
@@ -43,7 +43,7 @@ Demonstrate!
 
 ```python
 
-from zyp.model.fluent import FluentTransformation
+from loko.model.fluent import FluentTransformation
 
 transformation = FluentTransformation()
 .jmes("records[?starts_with(location, 'B')]")

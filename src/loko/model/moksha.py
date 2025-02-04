@@ -8,9 +8,9 @@ import transon
 from attr import Factory
 from attrs import define
 
-from zyp.model.base import DictOrList
-from zyp.model.bucket import ConverterBase, MokshaTransformer, TransonTemplate
-from zyp.util.expression import compile_expression
+from loko.model.base import DictOrList
+from loko.model.bucket import ConverterBase, MokshaTransformer, TransonTemplate
+from loko.util.expression import compile_expression
 
 logger = logging.getLogger(__name__)
 

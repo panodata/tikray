@@ -4,7 +4,7 @@ import typing as t
 from attr import Factory
 from attrs import define
 
-from zyp.model.base import Collection, DictOrList, Dumpable, Record
+from loko.model.base import Collection, DictOrList, Dumpable, Record
 
 
 @define

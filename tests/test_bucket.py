@@ -6,14 +6,14 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
-from zyp.model.base import SchemaDefinition
-from zyp.model.bucket import (
+from loko.model.base import SchemaDefinition
+from loko.model.bucket import (
     BucketTransformation,
     FieldRenamer,
     TransonTransformation,
     ValueConverter,
 )
-from zyp.model.collection import CollectionTransformation
+from loko.model.collection import CollectionTransformation
 
 
 class ReadingWithTimestamps:
@@ -108,7 +108,7 @@ def test_value_converter_datetime_function_callback():
           be serialized into a text representation well.
     """
     engine = ValueConverter()
-    from zyp.function import to_datetime
+    from loko.function import to_datetime
 
     engine.add(pointer="/meta/american_date", transformer=to_datetime)
     indata = deepcopy(ReadingWithTimestamps.ingress)
@@ -181,7 +181,7 @@ def test_value_converter_transformer_unknown_symbol():
     engine = ValueConverter()
     with pytest.raises(AttributeError) as ex:
         engine.add(pointer="/foo", transformer="to_unknown")
-    assert ex.match("module 'zyp.function' has no attribute 'to_unknown'")
+    assert ex.match("module 'loko.function' has no attribute 'to_unknown'")
 
 
 def test_value_converter_unknown_function_failure():
@@ -190,7 +190,7 @@ def test_value_converter_unknown_function_failure():
     """
     with pytest.raises(AttributeError) as ex:
         ValueConverter().add(pointer="/foo", transformer="unknown42")
-    assert ex.match("module 'zyp.function' has no attribute 'unknown42'")
+    assert ex.match("module 'loko.function' has no attribute 'unknown42'")
 
 
 def test_value_converter_unknown_function_disabled():
@@ -259,7 +259,7 @@ def test_bucket_transformation_serialize():
         values=ValueConverter().add(pointer="/meta/date", transformer="to_unixtime"),
     )
     transformation_dict = {
-        "meta": {"version": 1, "type": "zyp-bucket"},
+        "meta": {"version": 1, "type": "loko-bucket"},
         "schema": {"rules": [{"pointer": "/meta/date", "type": "DATETIME"}]},
         "names": {"rules": [{"new": "id", "old": "_id"}]},
         "values": {"rules": [{"pointer": "/meta/date", "transformer": "to_unixtime"}]},
@@ -280,7 +280,7 @@ def test_bucket_transformation_serialize_args():
     )
     result = transformation.to_dict()
     transformation_dict = {
-        "meta": {"version": 1, "type": "zyp-bucket"},
+        "meta": {"version": 1, "type": "loko-bucket"},
         "values": {"rules": [{"pointer": "", "transformer": "operator.itemgetter", "args": ["value"]}]},
     }
     assert result == transformation_dict
@@ -319,7 +319,7 @@ def test_bucket_marshal_disabled_rule():
         .add(pointer="/baz", transformer="to_unixtime", disabled=False)
     )
     transformation_dict = {
-        "meta": {"version": 1, "type": "zyp-bucket"},
+        "meta": {"version": 1, "type": "loko-bucket"},
         "values": {
             "rules": [
                 {"pointer": "/foo", "transformer": "to_unixtime", "disabled": True},
