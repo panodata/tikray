@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## 2025/02/05 v0.0.23
 - Renamed package to `loko`
 
 ## 2024/09/26 v0.0.19
