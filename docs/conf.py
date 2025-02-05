@@ -8,7 +8,7 @@
 
 # ruff: noqa: ERA001
 
-project = "loko"
+project = "tikray"
 copyright = "2019-2025, The Panodata Developers"  # noqa: A001
 author = "The Panodata Developers"
 
@@ -42,7 +42,7 @@ html_theme = "furo"
 # further.  For a list of options available for each theme, see the
 # documentation.
 
-html_title = "loko"
+html_title = "tikray"
 
 html_theme_options = {
     "sidebar_hide_name": False,
@@ -106,7 +106,7 @@ copybutton_prompt_text = r">>> |\.\.\. |\$ |sh\$ |PS> |cr> |mysql> |In \[\d*\]: 
 copybutton_prompt_is_regexp = True
 
 # Configure sphinxext-opengraph
-ogp_site_url = "https://loko.readthedocs.io/"
+ogp_site_url = "https://tikray.readthedocs.io/"
 ogp_enable_meta_description = True
 # ogp_image = "http://example.org/image.png"
 # ogp_description_length = 300

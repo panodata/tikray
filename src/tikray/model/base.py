@@ -8,7 +8,7 @@ from attrs import define
 from cattrs.preconf.json import make_converter as make_json_converter
 from cattrs.preconf.pyyaml import make_converter as make_yaml_converter
 
-from loko.util.data import no_disabled_false, no_privates_no_nulls_no_empties
+from tikray.util.data import no_disabled_false, no_privates_no_nulls_no_empties
 
 Record = t.Dict[str, t.Any]
 Collection = t.List[Record]

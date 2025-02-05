@@ -8,9 +8,9 @@ import transon
 from attr import Factory
 from attrs import define
 
-from loko.model.base import DictOrList
-from loko.model.bucket import ConverterBase, MokshaTransformer, TransonTemplate
-from loko.util.expression import compile_expression
+from tikray.model.base import DictOrList
+from tikray.model.bucket import ConverterBase, MokshaTransformer, TransonTemplate
+from tikray.util.expression import compile_expression
 
 logger = logging.getLogger(__name__)
 

@@ -1,4 +1,4 @@
-from loko.model.fluent import FluentTransformation
+from tikray.model.fluent import FluentTransformation
 
 
 def test_fluent_transformation():

@@ -1,8 +1,8 @@
-# Loko Transformations Example Gallery
+# Tikray Transformations Example Gallery
 
-This page gives you a hands-on introduction into Loko Transformations on behalf
+This page gives you a hands-on introduction into Tikray Transformations on behalf
 of a few example snippets, recipes, and use cases, in order to get you accustomed
-to Loko's capabilities.
+to Tikray's capabilities.
 
 If you discover the need for another kind of transformation, or need assistance
 crafting transformation rules, please reach out to us on the [issue tracker].
@@ -58,11 +58,11 @@ no tutorial yet: Please look at the source and software tests.
 
 ::::{tab-set-code}
 ```{code-block} python
-# Record-level "Loko Bucket Transformation" definition.
+# Record-level "Tikray Bucket Transformation" definition.
 # Includes column renaming and applying Python converter functions.
 
 from pprint import pprint
-from loko import BucketTransformation, FieldRenamer, ValueConverter
+from tikray import BucketTransformation, FieldRenamer, ValueConverter
 
 # Consider a slightly messy collection of records.
 data_in = [
@@ -83,12 +83,12 @@ data_out = list(map(transformation.apply, data_in))
 pprint(data_out)
 ```
 ```{code-block} yaml
-# Record-level "Loko Bucket Transformation" definition.
+# Record-level "Tikray Bucket Transformation" definition.
 # Includes column renaming and applying Python converter functions.
 ---
 
 meta:
-  type: loko-bucket
+  type: tikray-bucket
   version: 1
 names:
   rules:
@@ -175,7 +175,7 @@ Other than those special rules, the fundamental ones to re-shape the data are:
 - On each record, adjust the data types of the `id` and `value` fields.
 - Postprocess collection, applying a custom scaling factor to the `value` field.
 
-Loko let's you concisely write those rules down, using the Python language, and will
+Tikray let's you concisely write those rules down, using the Python language, and will
 also let you serialize the transformation description into a text-based format.
 
 The Python program can be executed in a Python REPL 1:1.
@@ -186,12 +186,12 @@ no tutorial yet: Please look at the source and software tests.
 
 ::::{tab-set-code}
 ```{code-block} python
-# Collection-level "Loko Collection Transformation" definition.
+# Collection-level "Tikray Collection Transformation" definition.
 # Includes rules for different kinds of transformations and processors.
 # Uses all of JMES, jq, and JSON Pointer technologies for demonstration purposes.
 
 from pprint import pprint
-from loko import \
+from tikray import \
     BucketTransformation, CollectionTransformation, \
     FieldRenamer, MokshaTransformation, ValueConverter
 
@@ -228,14 +228,14 @@ data_out = transformation.apply(data_in)
 pprint(data_out)
 ```
 ```{code-block} yaml
-# Collection-level "Loko Collection Transformation" definition.
+# Collection-level "Tikray Collection Transformation" definition.
 # Includes rules for different kinds of transformations and processors.
 # Uses all of JMES, jq, and JSON Pointer technologies for demonstration purposes.
 ---
 
 meta:
   version: 1
-  type: loko-collection
+  type: tikray-collection
 pre:
   rules:
   - expression: records[?not_null(meta.location) && !starts_with(meta.location, 'N')]
@@ -258,7 +258,7 @@ post:
 ```
 ::::
 
-In order to serialize the `loko-collection` transformation description using the Python API,
+In order to serialize the `tikray-collection` transformation description using the Python API,
 for example into YAML format, use this code.
 ```python
 print(transformation.to_yaml())
@@ -318,11 +318,11 @@ no tutorial yet: Please look at the source and software tests.
 
 ::::{tab-set-code}
 ```{code-block} python
-# Collection-level "Loko Collection Transformation" definition.
+# Collection-level "Tikray Collection Transformation" definition.
 # Includes a Moksha/jq transformation rule for including elements.
 
 from pprint import pprint
-from loko import CollectionTransformation, MokshaTransformation
+from tikray import CollectionTransformation, MokshaTransformation
 
 data_in = [
     {
@@ -341,12 +341,12 @@ data_out = transformation.apply(data_in)
 pprint(data_out)
 ```
 ```{code-block} yaml
-# Collection-level "Loko Collection Transformation" definition.
+# Collection-level "Tikray Collection Transformation" definition.
 # Includes a Moksha/jq transformation rule for including elements.
 ---
 
 meta:
-  type: loko-collection
+  type: tikray-collection
   version: 1
 pre:
   rules:
@@ -408,11 +408,11 @@ no tutorial yet: Please look at the source and software tests.
 
 ::::{tab-set-code}
 ```{code-block} python
-# Collection-level "Loko Collection Transformation" definition.
+# Collection-level "Tikray Collection Transformation" definition.
 # Includes a Moksha/jq transformation rule for excluding elements.
 
 from pprint import pprint
-from loko import CollectionTransformation, MokshaTransformation
+from tikray import CollectionTransformation, MokshaTransformation
 
 data_in = [
     {
@@ -431,12 +431,12 @@ data_out = transformation.apply(data_in)
 pprint(data_out)
 ```
 ```{code-block} yaml
-# Collection-level "Loko Collection Transformation" definition.
+# Collection-level "Tikray Collection Transformation" definition.
 # Includes a Moksha/jq transformation rule for excluding elements.
 ---
 
 meta:
-  type: loko-collection
+  type: tikray-collection
   version: 1
 pre:
   rules:
@@ -498,11 +498,11 @@ no tutorial yet: Please look at the source and software tests.
 
 ::::{tab-set-code}
 ```{code-block} python
-# Collection-level "Loko Collection Transformation" definition.
+# Collection-level "Tikray Collection Transformation" definition.
 # Includes two Moksha/jq transformation rules for unwrapping and flattening.
 
 from pprint import pprint
-from loko import CollectionTransformation, MokshaTransformation
+from tikray import CollectionTransformation, MokshaTransformation
 
 data_in = {
     "message-source": "community",
@@ -523,12 +523,12 @@ data_out = transformation.apply(data_in)
 pprint(data_out)
 ```
 ```{code-block} yaml
-# Collection-level "Loko Collection Transformation" definition.
+# Collection-level "Tikray Collection Transformation" definition.
 # Includes two Moksha/jq transformation rules for unwrapping and flattening.
 ---
 
 meta:
-  type: loko-collection
+  type: tikray-collection
   version: 1
 pre:
   rules:

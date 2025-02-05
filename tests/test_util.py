@@ -3,8 +3,8 @@ import jq
 import jsonpointer
 import pytest
 import transon
-from loko.util.expression import compile_expression
-from loko.util.locator import to_pointer
+from tikray.util.expression import compile_expression
+from tikray.util.locator import to_pointer
 
 
 def test_to_pointer_string():

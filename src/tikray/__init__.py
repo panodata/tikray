@@ -1,4 +1,4 @@
-from loko.model import (
+from tikray.model import (
     BucketTransformation,
     CollectionTransformation,
     FieldRenamer,

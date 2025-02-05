@@ -1,7 +1,7 @@
 {
   "meta": {
     "version": 1,
-    "type": "loko-bucket"
+    "type": "tikray-bucket"
   },
   "schema": {
     "rules": [

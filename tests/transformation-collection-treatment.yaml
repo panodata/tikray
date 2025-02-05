@@ -1,5 +1,5 @@
 meta:
   version: 1
-  type: loko-collection
+  type: tikray-collection
 treatment:
   ignore_complex_lists: true

@@ -3,13 +3,13 @@ import typing as t
 from attr import Factory
 from attrs import define
 
-from loko.model.base import Dumpable, Metadata
-from loko.model.collection import CollectionAddress, CollectionTransformation
+from tikray.model.base import Dumpable, Metadata
+from tikray.model.collection import CollectionAddress, CollectionTransformation
 
 
 @define
 class TransformationProject(Dumpable):
-    meta: Metadata = Metadata(version=1, type="loko-project")
+    meta: Metadata = Metadata(version=1, type="tikray-project")
     collections: t.List[CollectionTransformation] = Factory(list)
     _map: t.Dict[CollectionAddress, CollectionTransformation] = Factory(dict)
 

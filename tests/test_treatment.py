@@ -1,4 +1,4 @@
-from loko.model.treatment import Treatment
+from tikray.model.treatment import Treatment
 
 RECORD_IN = {
     "data": {

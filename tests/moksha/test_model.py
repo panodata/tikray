@@ -3,7 +3,7 @@ import re
 
 import pytest
 from jmespath.exceptions import ParseError
-from loko.model.moksha import MokshaRule, MokshaTransformation
+from tikray.model.moksha import MokshaRule, MokshaTransformation
 
 
 def test_moksha_rule_compile_success():
@@ -50,7 +50,7 @@ def test_moksha_transformation_success_jq():
 
 
 def test_moksha_transformation_error_jq_scalar(caplog):
-    logging.getLogger("loko.model.moksha").setLevel(logging.DEBUG)
+    logging.getLogger("tikray.model.moksha").setLevel(logging.DEBUG)
     moksha = MokshaTransformation().jq(". /= 100")
     with pytest.raises(ValueError) as ex:
         moksha.apply("foo")
@@ -64,7 +64,7 @@ def test_moksha_transformation_error_jq_scalar(caplog):
 
 
 def test_moksha_transformation_error_jq_map(caplog):
-    logging.getLogger("loko.model.moksha").setLevel(logging.DEBUG)
+    logging.getLogger("tikray.model.moksha").setLevel(logging.DEBUG)
     moksha = MokshaTransformation().jq(".foo")
     with pytest.raises(ValueError) as ex:
         moksha.apply(map(lambda x: x, ["foo"]))  # noqa: C417

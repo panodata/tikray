@@ -1,4 +1,4 @@
-# Loko Transformations
+# Tikray Transformations
 
 ## About
 
@@ -44,11 +44,11 @@ in other programming languages.
     library may gradually be rewritten in Rust if that topic becomes an issue.
 :Immediate:
     Other ETL frameworks and concepts often need to first land your data in the
-    target system before applying subsequent transformations. Loko is working
+    target system before applying subsequent transformations. Tikray is working
     directly within the data pipeline, before data is inserted into the target
     system.
 :Human:
-    Loko provides capabilities to imperatively filter and reshape data structures
+    Tikray provides capabilities to imperatively filter and reshape data structures
     in an iterative authoring process, based on deterministic procedures building
     upon each other. When it comes to ad hoc or automated data conversion tasks,
     it puts you into the driver's seat, and encourages sharing and reuse of
@@ -56,8 +56,8 @@ in other programming languages.
 
 ## Design
 :Data Model:
-    The data model of Loko is hierarchical: A Loko project includes definitions for
-    multiple Loko collections, whose includes definitions for possibly multiple sets
+    The data model of Tikray is hierarchical: A Tikray project includes definitions for
+    multiple Tikray collections, whose includes definitions for possibly multiple sets
     of transformation rules of different kinds, for example multiple items of
     type `BucketTransformation` or `MokshaTransformation`.
 
@@ -76,11 +76,11 @@ in other programming languages.
 
 ::::{tab-set}
 
-:::{tab-item} loko-project
+:::{tab-item} tikray-project
 ```{code-block} yaml
-:caption: A definition for a Loko project in YAML format.
+:caption: A definition for a Tikray project in YAML format.
 meta:
-  type: loko-project
+  type: tikray-project
   version: 1
 collections:
 - address:
@@ -103,13 +103,13 @@ collections:
 
 :::
 
-:::{tab-item} loko-collection
+:::{tab-item} tikray-collection
 ```{code-block} yaml
-:caption: A definition for a Loko collection in YAML format.
+:caption: A definition for a Tikray collection in YAML format.
 
 meta:
   version: 1
-  type: loko-collection
+  type: tikray-collection
 pre:
   rules:
   - expression: records[?not_null(meta.location) && !starts_with(meta.location, 'N')]
@@ -137,7 +137,7 @@ post:
 
 ## Example Gallery
 
-In order to learn how to use Loko, please explore the hands-on example gallery.
+In order to learn how to use Tikray, please explore the hands-on example gallery.
 ```{toctree}
 :maxdepth: 2
 
@@ -159,7 +159,7 @@ specifically [an introduction and overview about Singer].
 
 ## Etymology
 
-Loko means "transform" in the [Luo language].
+Tikray means "transform" in the [Quechua language].
 A previous version used the name `zyp`,
 with kudos to [Kris Zyp] for conceiving [JSON Pointer].
 
@@ -179,7 +179,7 @@ Backlog <backlog>
 [cattrs]: https://catt.rs/
 [DWIM]: https://en.wikipedia.org/wiki/DWIM
 [Kris Zyp]: https://github.com/kriszyp
-[Luo language]: https://en.wikipedia.org/wiki/Luo_language
+[Quechua language]: https://en.wikipedia.org/wiki/Quechua_language
 [jp]: https://github.com/jmespath/jp
 [jq]: https://jqlang.github.io/jq/
 [jsonpointer]: https://python-json-pointer.readthedocs.io/en/latest/commandline.html

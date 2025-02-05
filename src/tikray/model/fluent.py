@@ -2,8 +2,8 @@ import typing as t
 
 from attrs import define
 
-from loko.model.bucket import ConverterBase
-from loko.model.moksha import MokshaRule
+from tikray.model.bucket import ConverterBase
+from tikray.model.moksha import MokshaRule
 
 
 @define
