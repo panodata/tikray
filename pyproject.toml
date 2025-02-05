@@ -110,7 +110,7 @@ optional-dependencies.develop = [
   "ruff<0.6",
   "validate-pyproject<0.19",
 ]
-optional-dependencies.doc = [
+optional-dependencies.docs = [
   "furo==2024.1.29",               # Check visited link style on newer versions!
   "myst-parser[linkify]>=0.18,<4",
   "sphinx-autobuild==2021.3.14",   # Newer versions stopped "watching" appropriately?
@@ -277,14 +277,14 @@ check = [
   "test",
 ]
 
-doc-autobuild = [
-  { cmd = "sphinx-autobuild --open-browser --watch src doc doc/_build" },
+docs-autobuild = [
+  { cmd = "sphinx-autobuild --open-browser --watch src docs docs/_build" },
 ]
-doc-html = [
-  { cmd = "sphinx-build -W --keep-going doc doc/_build" },
+docs-html = [
+  { cmd = "sphinx-build -W --keep-going docs docs/_build" },
 ]
-doc-linkcheck = [
-  { cmd = "sphinx-build -W --keep-going -b linkcheck doc doc/_build" },
+docs-linkcheck = [
+  { cmd = "sphinx-build -W --keep-going -b linkcheck docs docs/_build" },
 ]
 
 format = [
