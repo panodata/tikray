@@ -1,4 +1,4 @@
-# Loko Example Gallery
+# Loko Transformations Example Gallery
 
 This page gives you a hands-on introduction into Loko Transformations on behalf
 of a few example snippets, recipes, and use cases, in order to get you accustomed
@@ -92,8 +92,8 @@ meta:
   version: 1
 names:
   rules:
-  - new: id
-    old: _id
+  - old: _id
+    new: id
 values:
   rules:
   - pointer: /id
@@ -243,8 +243,8 @@ pre:
 bucket:
   names:
     rules:
-    - new: id
-      old: _id
+    - old: _id
+      new: id
   values:
     rules:
     - pointer: /id
@@ -549,5 +549,214 @@ how to define transformation rules, and the corresponding YAML representation.
 :::::::
 
 
+## jqlang cheat sheet
+This section enumerates a few jqlang expressions that you may find useful
+in this context. Please also visit the [jqlang manual].
 
-[issue tracker]: https://github.com/panodata/loko/issues
+### Drop Elements
+::::::{card}
+Drop object attributes by path, also multiple ones at once.
+```yaml
+expression: .[] |= del(.meta.timestamp, .data.def)
+```
+:::::{dropdown} Example
+:margin: 0
+
+::::{grid} 2
+:gutter: 0
+:margin: 0
+:padding: 0
+
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Input Data
+```json
+[{
+  "meta": {"id": "Hotzenplotz", "timestamp": 123456789},
+  "data": {"abc": 123, "def": 456}
+}]
+```
+:::
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Output Data
+```json
+[{
+  "meta": {"id": "Hotzenplotz"},
+  "data": {"abc": 123}
+}]
+```
+:::
+::::
+:::::
+::::::
+
+::::::{card}
+Drop attribute from all objects in array, where in some documents,
+the array may not exist, or it might not be an array.
+```yaml
+expression: .[] |= del(.data.array[]?.def)
+```
+:::::{dropdown} Example
+::::{grid} 2
+:gutter: 0
+:margin: 0
+:padding: 0
+
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Input Data
+```json
+[
+  {"data": {"array": [
+    {"abc": 123, "def": 456},
+    {"abc": 123, "def": 456},
+    {"abc": 123}
+  ]}},
+  {"data": {"array": 42}},
+  {"data": {}},
+  {"meta": {"version": 42}}
+]
+```
+:::
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Output Data
+```json
+[
+  {"data": {"array": [
+    {"abc": 123},
+    {"abc": 123},
+    {"abc": 123}
+  ]}},
+  {"data": {"array": 42}},
+  {"data": {}},
+  {"meta": {"version": 42}}
+]
+```
+:::
+::::
+:::::
+::::::
+
+::::::{card}
+Drop array elements by index.
+```yaml
+expression: .[] |= del(.data.[1])
+```
+:::::{dropdown} Example
+::::{grid} 2
+:gutter: 0
+:margin: 0
+:padding: 0
+
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Input Data
+```json
+[{"data": [1, {"foo": "bar"}, 2]}]
+```
+:::
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Output Data
+```json
+[{"data": [1, 2]}]
+```
+:::
+::::
+:::::
+::::::
+
+### Manipulate Values
+::::::{card}
+Update value of deeply nested attribute if it exists.
+```yaml
+expression: .[] |= if .data.abc then .data.abc *= 2 end
+```
+:::::{dropdown} Example
+::::{grid} 2
+:gutter: 0
+:margin: 0
+:padding: 0
+
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Input Data
+```json
+[
+  {"data": {"abc": 123}},
+  {"data": {"def": 456}},
+  {"meta": {"version": 42}}
+]
+```
+:::
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Output Data
+```json
+[
+  {"data": {"abc": 246}},
+  {"data": {"def": 456}},
+  {"meta": {"version": 42}}
+]
+```
+:::
+::::
+:::::
+::::::
+
+::::::{card}
+Update value of deeply nested attribute within an array if it exists.
+```yaml
+expression: .[] |= if (.data | type == "array") and .data[].abc then .data[].abc *= 2 end
+```
+:::::{dropdown} Example
+::::{grid} 2
+:gutter: 0
+:margin: 0
+:padding: 0
+
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Input Data
+```json
+[
+  {"data": [{"abc": 123}]},
+  {"data": [{"def": 456}]},
+  {"data": null},
+  {"data": 42},
+  {"meta": {"version": 42}}
+]
+```
+:::
+:::{grid-item-card}
+:margin: 0
+:padding: 0
+Output Data
+```json
+[
+  {"data": [{"abc": 246}]},
+  {"data": [{"def": 456}]},
+  {"data": null},
+  {"data": 42},
+  {"meta": {"version": 42}}
+]
+```
+:::
+::::
+:::::
+::::::
+
+
+[issue tracker]: https://github.com/crate/commons-codec/issues
+[jqlang manual]: https://jqlang.github.io/jq/manual/

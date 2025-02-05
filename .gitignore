@@ -1,6 +1,11 @@
-.coverage
-.idea
+/build
+/.coverage
+/coverage.xml
+/docs/_build
+/dist
+/.idea
+/.venv*
 __pycache__
-coverage.xml
+*.DS_Store
 *.egg-info
 *.pyc
