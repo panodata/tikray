@@ -1,10 +1,9 @@
 # Changelog
 
 ## Unreleased
-- Renamed package to `tikray`
 
 ## 2025/02/05 v0.0.23
-- Renamed package to `loko`
+- Renamed package to `loko`, then `tikray`
 
 ## 2024/09/26 v0.0.19
 - Zyp/Moksha: Improve error reporting when rule evaluation fails
