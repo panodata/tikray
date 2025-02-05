@@ -10,9 +10,9 @@ from attr import Factory
 from attrs import define
 from jsonpointer import JsonPointer
 
-from loko.model.base import Dumpable, Metadata, SchemaDefinition
-from loko.util.dictx import OrderedDictX
-from loko.util.locator import swap_node, to_pointer
+from tikray.model.base import Dumpable, Metadata, SchemaDefinition
+from tikray.util.dictx import OrderedDictX
+from tikray.util.locator import swap_node, to_pointer
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +70,7 @@ class ValueConverterRule(ConverterRuleBase):
     @staticmethod
     def _resolve_fun(symbol: str) -> t.Callable:
         if "." not in symbol:
-            symbol = f"loko.function.{symbol}"
+            symbol = f"tikray.function.{symbol}"
         modname, symbol = symbol.rsplit(".", 1)
         mod = importlib.import_module(modname)
         return getattr(mod, symbol)
@@ -165,7 +165,7 @@ class BucketTransformation(Dumpable):
     - https://transon-org.github.io/
     """
 
-    meta: Metadata = Metadata(version=1, type="loko-bucket")
+    meta: Metadata = Metadata(version=1, type="tikray-bucket")
     schema: t.Union[SchemaDefinition, None] = None
     names: t.Union[FieldRenamer, None] = None
     values: t.Union[ValueConverter, None] = None

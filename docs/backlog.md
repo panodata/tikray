@@ -59,7 +59,7 @@ Demonstrate more use cases, like...
 - [ ] Moksha transformations on Buckets
 - [ ] Fluent API interface
   ```python
-  from loko.model.fluent import FluentTransformation
+  from tikray.model.fluent import FluentTransformation
 
   transformation = FluentTransformation()
   .jmes("records[?starts_with(location, 'B')]")
@@ -84,7 +84,7 @@ Demonstrate more use cases, like...
   https://github.com/kdl-org/kdl
 
 ## Done
-- [x] Refactor module namespace to `zyp`, then `loko`
+- [x] Refactor module namespace to `zyp`, then `loko`, then `tikray`
 - [x] Documentation
 - [x] Apply to MongoDB Table Loader in CrateDB Toolkit
 - [x] Model: Toggle rule active / inactive by respecting `disabled` flag

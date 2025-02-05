@@ -2,9 +2,9 @@ from copy import deepcopy
 from pathlib import Path
 
 import yaml
-from loko.model.bucket import BucketTransformation, FieldRenamer, ValueConverter
-from loko.model.collection import CollectionTransformation
-from loko.model.moksha import MokshaTransformation
+from tikray.model.bucket import BucketTransformation, FieldRenamer, ValueConverter
+from tikray.model.collection import CollectionTransformation
+from tikray.model.moksha import MokshaTransformation
 
 
 class ComplexRecipe:
@@ -65,14 +65,14 @@ def test_collection_transformation_serialize():
     """
     transformation = ComplexRecipe.transformation
     transformation_dict = {
-        "meta": {"version": 1, "type": "loko-collection"},
+        "meta": {"version": 1, "type": "tikray-collection"},
         "pre": {
             "rules": [
                 {"type": "jmes", "expression": "records[?not_null(meta.location) && !starts_with(meta.location, 'N')]"}
             ]
         },
         "bucket": {
-            "meta": {"version": 1, "type": "loko-bucket"},
+            "meta": {"version": 1, "type": "tikray-bucket"},
             "names": {"rules": [{"old": "_id", "new": "id"}]},
             "values": {
                 "rules": [

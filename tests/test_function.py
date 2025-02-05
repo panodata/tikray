@@ -2,7 +2,7 @@ import datetime as dt
 
 import pytest
 from dateutil.parser import ParserError
-from loko.function import to_datetime, to_unixtime
+from tikray.function import to_datetime, to_unixtime
 
 stddate = dt.datetime(2023, 6, 30)
 

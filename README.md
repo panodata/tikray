@@ -1,18 +1,18 @@
-# Loko
+# Tikray
 
-[![Tests](https://github.com/panodata/loko/actions/workflows/tests.yml/badge.svg)](https://github.com/panodata/loko/actions/workflows/tests.yml)
-[![Coverage](https://codecov.io/gh/panodata/loko/branch/main/graph/badge.svg)](https://app.codecov.io/gh/panodata/loko)
-[![Build status (documentation)](https://readthedocs.org/projects/loko/badge/)](https://loko.readthedocs.io/)
-[![License](https://img.shields.io/pypi/l/loko.svg)](https://pypi.org/project/loko/)
+[![Tests](https://github.com/panodata/tikray/actions/workflows/tests.yml/badge.svg)](https://github.com/panodata/tikray/actions/workflows/tests.yml)
+[![Coverage](https://codecov.io/gh/panodata/tikray/branch/main/graph/badge.svg)](https://app.codecov.io/gh/panodata/tikray)
+[![Build status (documentation)](https://readthedocs.org/projects/tikray/badge/)](https://tikray.readthedocs.io/)
+[![License](https://img.shields.io/pypi/l/tikray.svg)](https://pypi.org/project/tikray/)
 
-[![PyPI Version](https://img.shields.io/pypi/v/loko.svg)](https://pypi.org/project/loko/)
-[![Python Version](https://img.shields.io/pypi/pyversions/loko.svg)](https://pypi.org/project/loko/)
-[![PyPI Downloads](https://pepy.tech/badge/loko/month)](https://pepy.tech/project/loko/)
-[![Status](https://img.shields.io/pypi/status/loko.svg)](https://pypi.org/project/loko/)
+[![PyPI Version](https://img.shields.io/pypi/v/tikray.svg)](https://pypi.org/project/tikray/)
+[![Python Version](https://img.shields.io/pypi/pyversions/tikray.svg)](https://pypi.org/project/tikray/)
+[![PyPI Downloads](https://pepy.tech/badge/tikray/month)](https://pepy.tech/project/tikray/)
+[![Status](https://img.shields.io/pypi/status/tikray.svg)](https://pypi.org/project/tikray/)
 
 ## About
 
-Loko is a generic and compact **transformation engine** written in Python, for data
+Tikray is a generic and compact **transformation engine** written in Python, for data
 decoding, encoding, conversion, translation, transformation, and cleansing purposes,
 to be used as a pipeline element for data pre- and/or post-processing.
 
@@ -24,10 +24,10 @@ implemented using [attrs] and [cattrs].
 
 ## Installation
 
-The package is available from [PyPI] at [loko].
+The package is available from [PyPI] at [tikray].
 To install the most recent version, invoke:
 ```shell
-uv pip install --upgrade 'loko'
+uv pip install --upgrade 'tikray'
 ```
 
 ## Usage
@@ -47,12 +47,12 @@ See [research and development notes],
 specifically [an introduction and overview about Singer].
 
 ### Contributing
-The `loko` package is an open source project, and is
+The `tikray` package is an open source project, and is
 [managed on GitHub]. The project is still in its infancy, and
 we appreciate contributions of any kind.
 
 ### Etymology
-Loko means "transform" in the [Luo language]. 
+Tikray means "transform" in the [Quechua language].
 A previous version used the name `zyp`,
 with kudos to [Kris Zyp] for conceiving [JSON Pointer].
 
@@ -65,14 +65,14 @@ within the header sections of relevant files.
 
 
 [An introduction and overview about Singer]: https://github.com/daq-tools/lorrystream/blob/main/doc/singer/intro.md
-[documentation]: https://loko.readthedocs.io/
-[examples]: https://loko.readthedocs.io/examples.html
+[documentation]: https://tikray.readthedocs.io/
+[examples]: https://tikray.readthedocs.io/examples.html
 [Kris Zyp]: https://github.com/kriszyp
-[loko]: https://pypi.org/project/loko/
-[Luo language]: https://en.wikipedia.org/wiki/Luo_language
-[managed on GitHub]: https://github.com/panodata/loko
+[tikray]: https://pypi.org/project/tikray/
+[Quechua language]: https://en.wikipedia.org/wiki/Quechua_language
+[managed on GitHub]: https://github.com/panodata/tikray
 [PyPI]: https://pypi.org/
-[research and development notes]: https://loko.readthedocs.io/research.html
+[research and development notes]: https://tikray.readthedocs.io/research.html
 
 [attrs]: https://www.attrs.org/
 [cattrs]: https://catt.rs/

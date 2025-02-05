@@ -1,5 +1,5 @@
-# Support functions for Loko Transformations
-# https://loko.readthedocs.io/
+# Support functions for Tikray Transformations
+# https://tikray.readthedocs.io/
 
 def to_array:
     # Convert element to array if it isn't an array already.

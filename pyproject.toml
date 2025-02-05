@@ -6,7 +6,7 @@ requires = [
 ]
 
 [project]
-name = "loko"
+name = "tikray"
 description = "A compact data transformation engine."
 readme = "README.md"
 keywords = [
@@ -132,11 +132,11 @@ optional-dependencies.test = [
   "pytest-mock<4",
 ]
 
-urls.Changelog = "https://loko.readthedocs.io/changes.html"
-urls.Documentation = "https://loko.readthedocs.io/"
-urls.Homepage = "https://loko.readthedocs.io/"
-urls.Issues = "https://github.com/panodata/loko/issues"
-urls.Repository = "https://github.com/panodata/loko"
+urls.Changelog = "https://tikray.readthedocs.io/changes.html"
+urls.Documentation = "https://tikray.readthedocs.io/"
+urls.Homepage = "https://tikray.readthedocs.io/"
+urls.Issues = "https://github.com/panodata/tikray/issues"
+urls.Repository = "https://github.com/panodata/tikray"
 
 [tool.black]
 line-length = 120
@@ -212,7 +212,7 @@ pythonpath = [
 testpaths = [
   "examples",
   "tests",
-  "loko",
+  "tikray",
 ]
 python_files = [
   "test_*.py",
@@ -233,7 +233,7 @@ source = [
 branch = false
 omit = [
   "tests/*",
-  "src/loko/util/dictx.py",
+  "src/tikray/util/dictx.py",
 ]
 
 [tool.coverage.report]
@@ -247,7 +247,7 @@ exclude_lines = [
 [tool.mypy]
 mypy_path = "src"
 packages = [
-  "loko",
+  "tikray",
 ]
 exclude = [
 ]
