@@ -70,6 +70,7 @@ class Dumpable:
 
     @classmethod
     def from_dict(cls, data: t.Dict[str, t.Any]):
+        # FIXME: Converter missing!
         return cls(**data)
 
     @classmethod

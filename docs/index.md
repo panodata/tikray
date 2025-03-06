@@ -55,6 +55,7 @@ in other programming languages.
     transformation recipes.
 
 ## Design
+
 :Data Model:
     The data model of Tikray is hierarchical: A Tikray project includes definitions for
     multiple Tikray collections, whose includes definitions for possibly multiple sets
@@ -71,6 +72,13 @@ in other programming languages.
     defined by labels like `pre`, `bucket`, `post`, `treatment`, in that order.
     Each phase can include multiple rules of different kinds.
 
+## Usage
+
+```{toctree}
+:maxdepth: 2
+
+cli
+```
 
 ## Synopsis
 

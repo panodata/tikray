@@ -1,0 +1,13 @@
+{
+  "message-source": "system-3000",
+  "message-type": "eai-warehouse",
+  "records": [
+    {"_id": "12", "meta": {"name": "foo", "location": "B"}, "data": {"value": "4242"}},
+    null,
+    {"_id": "34", "meta": {"name": "bar", "location": "BY"}, "data": {"value": -8401}},
+    {"_id": "56", "meta": {"name": "baz", "location": "NI"}, "data": {"value": 2323}},
+    {"_id": "78", "meta": {"name": "qux", "location": "NRW"}, "data": {"value": -580}},
+    null,
+    null
+  ]
+}
