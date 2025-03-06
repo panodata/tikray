@@ -1,3 +1,7 @@
+import json
+import typing as t
+
+
 def no_privates_no_nulls_no_empties(key, value) -> bool:
     """
     A filter for `attr.asdict`, to suppress private attributes.
@@ -15,3 +19,7 @@ def no_disabled_false(key, value):
     A filter for `attr.asdict`, to suppress `disabled: false` attributes.
     """
     return not (key.name == "disabled" and value is False)
+
+
+def jd(thing: t.Any):
+    return json.dumps(thing)

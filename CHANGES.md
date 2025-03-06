@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- CLI: Added CLI interface, per `tikray` program
 
 ## 2025/02/05 v0.0.23
 - Renamed package to `loko`, then `tikray`
