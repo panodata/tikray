@@ -97,7 +97,7 @@ dependencies = [
   "cattrs<25",
   "importlib-resources<6.5; python_version<'3.10'",
   "jmespath<1.1",
-  "jq<1.8",
+  "jq<1.9",
   "jsonpointer<4",
   "python-dateutil<2.10",
   "pyyaml<7",
