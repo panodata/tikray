@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## 2025/03/12 v0.1.0
 - CLI: Added CLI interface, per `tikray` program
 - Core: Started using `orjson` and `orjsonl` packages, for performance
   reasons and JSONL/NDJSON support
