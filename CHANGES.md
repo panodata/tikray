@@ -2,7 +2,9 @@
 
 ## Unreleased
 - CLI: Added CLI interface, per `tikray` program
-- Core: Started using `orjson` package
+- Core: Started using `orjson` and `orjsonl` packages, for performance
+  reasons and JSONL/NDJSON support
+- Core: Optionally invoke single resource on project file
 
 ## 2025/02/05 v0.0.23
 - Renamed package to `loko`, then `tikray`

@@ -8,10 +8,12 @@ eai_warehouse_reference = [
     {"id": 34, "meta": {"name": "bar", "location": "BY"}, "data": {"value": -84.01}},
 ]
 
+acme_conversation_reference = json.loads((Path("tests") / "examples" / "conversation.json").read_text())
+
 
 def test_cli_collection_stdout_success(cli_runner):
     """
-    CLI test: Invoke `tikray` with example data.
+    CLI test: Single resource to STDOUT.
     """
 
     result = cli_runner.invoke(
@@ -26,7 +28,7 @@ def test_cli_collection_stdout_success(cli_runner):
 
 def test_cli_collection_file_output_success(cli_runner, tmp_path):
     """
-    CLI test: Invoke `tikray` with example data.
+    CLI test: Single resource to file.
     """
 
     output_path = tmp_path / "output.json"
@@ -43,7 +45,7 @@ def test_cli_collection_file_output_success(cli_runner, tmp_path):
 
 def test_cli_collection_directory_output_success(cli_runner, tmp_path):
     """
-    CLI test: Invoke `tikray` with example data.
+    CLI test: Single resource to directory.
     """
 
     result = cli_runner.invoke(
@@ -60,7 +62,7 @@ def test_cli_collection_directory_output_success(cli_runner, tmp_path):
 
 def test_cli_project_success(cli_runner, tmp_path):
     """
-    CLI test: Invoke `tikray` with example data.
+    CLI test: Multiple resources (project) to directory.
     """
 
     result = cli_runner.invoke(
@@ -69,14 +71,28 @@ def test_cli_project_success(cli_runner, tmp_path):
         catch_exceptions=False,
     )
     assert result.exit_code == 0
-    reference = json.loads((Path("tests") / "examples" / "conversation.json").read_text())
     output = json.loads(Path(tmp_path / "conversation.json").read_text())
-    assert output == reference
+    assert output == acme_conversation_reference
+
+
+def test_cli_collection_from_project_file_success(cli_runner, tmp_path):
+    """
+    CLI test: Single resource from Tikray project file.
+    """
+
+    result = cli_runner.invoke(
+        cli,
+        args="-t examples/transformation-project.yaml -i examples/acme/conversation.json -a acme.conversation",
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    data = json.loads(result.output)
+    assert data == acme_conversation_reference
 
 
 def test_cli_project_warning_no_transformation(cli_runner, tmp_path, caplog):
     """
-    CLI test: Invoke `tikray` with example data.
+    CLI test: Verify processing multiple resources emits warnings on missing ones.
     """
 
     project = tmp_path / "project"
