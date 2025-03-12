@@ -100,6 +100,7 @@ dependencies = [
   "jmespath<1.1",
   "jq<1.9",
   "jsonpointer<4",
+  "orjson<4",
   "python-dateutil<2.10",
   "pyyaml<7",
   "toolz<0.13",
