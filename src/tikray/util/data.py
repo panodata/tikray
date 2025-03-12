@@ -1,5 +1,6 @@
-import json
 import typing as t
+
+import orjson as json
 
 
 def no_privates_no_nulls_no_empties(key, value) -> bool:

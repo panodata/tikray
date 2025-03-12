@@ -2,6 +2,7 @@
 
 ## Unreleased
 - CLI: Added CLI interface, per `tikray` program
+- Core: Started using `orjson` package
 
 ## 2025/02/05 v0.0.23
 - Renamed package to `loko`, then `tikray`
