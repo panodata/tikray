@@ -20,17 +20,40 @@ tikray \
 
 ### Single collection
 
-Process a single collection / file.
+Process a single resource (collection, file) using a Tikray collection transformation.
 ```shell
 tikray -t transformation-collection.yaml -i eai-warehouse.json
 ```
 
 ### Multiple collections
 
-Process multiple collections / files from a directory.
+Process multiple resources (collections, files) from a directory.
+The Tikray project file enumerates multiple transformation rules per resource.
 ```shell
 tikray -t examples/transformation-project.yaml -i examples/acme -o tmp/acme
 ```
+
+If you are using a Tikray project file, but would like to only invoke a
+single-resource transformation on it, you need to explicitly specify the
+resource address using `--address`/`-a`, so the engine will only select
+this particular collection.
+```shell
+tikray -t examples/transformation-project.yaml -i examples/acme/conversation.json -a acme.conversation
+```
+
+### JSONL support
+
+Tikray supports reading and writing the JSONL/NDJSON format, i.e. newline-
+delimited JSON. Tikray will automatically use this mode if it receives
+input files suffixed with `.jsonl` or `.ndjson`, or if you explicitly
+toggle the mode per `--jsonl` option flag.
+```shell
+tikray -t transformation.yaml -i input.jsonl
+```
+```shell
+tikray -t transformation.yaml -i input.json -a acme.conversation --jsonl -o output.jsonl
+```
+
 
 ## Example
 

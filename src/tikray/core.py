@@ -1,18 +1,15 @@
 import logging
-import sys
 import typing as t
 from pathlib import Path
 
-import orjson as json
-
 from tikray.model.collection import CollectionAddress, CollectionTransformation
 from tikray.model.project import TransformationProject
-from tikray.util.data import jd
+from tikray.util.data import load_json, save_json
 
 logger = logging.getLogger(__name__)
 
 
-def process_project(transformation: Path, input_: Path, output: Path):
+def process_project(transformation: Path, input_: Path, output: Path, use_jsonl: bool = False):
     logger.info(f"Using transformation '{transformation}' on multi-collection input '{input_}'")
 
     project = TransformationProject.from_yaml(transformation.read_text())
@@ -24,22 +21,29 @@ def process_project(transformation: Path, input_: Path, output: Path):
         except KeyError as ex:
             logger.warning(f"Could not find transformation definition for collection: {ex}")
             continue
-        data = json.loads(Path(item).read_text())
+        data = load_json(Path(item), use_jsonl=use_jsonl)
         output_path = output / item.name
-        with open(output_path, "wb") as output_stream:
-            output_stream.write(jd(tikray_transformation.apply(data)))
-            logger.info(f"Processed output: {output_path}")
+        save_json(tikray_transformation.apply(data), output_path, use_jsonl=use_jsonl)
+        logger.info(f"Processed output: {output_path}")
 
 
-def process_collection(transformation: Path, input_: Path, output: t.Optional[Path] = None):
+def process_collection(
+    transformation: Path,
+    input_: Path,
+    output: t.Optional[Path] = None,
+    address: t.Optional[str] = None,
+    use_jsonl: bool = False,
+):
     logger.info(f"Using transformation '{transformation}' on single-collection input '{input_}'")
-    data = json.loads(input_.read_text())
     ct = CollectionTransformation.from_yaml(transformation.read_text())
+    if address is not None:
+        pt = TransformationProject.from_yaml(transformation.read_text())
+        ct = pt.get(CollectionAddress(*address.split(".")))
+    logger.info(f"Processing input: {input_}")
+    data = load_json(input_, use_jsonl=use_jsonl)
     result = ct.apply(data)
-    output_stream = sys.stdout.buffer
     if output is not None:
         if output.is_dir():
             output = output / input_.name
-        output_stream = open(output, "wb")
-    output_stream.write(jd(result))
-    output_stream.flush()
+    save_json(result, output, use_jsonl=use_jsonl)
+    logger.info(f"Processed output: {output or 'stdout'}")

@@ -1,6 +1,11 @@
 # Backlog
 
 ## Iteration +1
+- Support for JSONL
+- Read and write compressed files. orjson uses `xopen` already, which can do it transparently
+- Allow processing larger-than-memory files
+
+## Iteration +2
 - [ ] Documentation: jqlang stdlib's `to_object` function for substructure management
 - [ ] Documentation: Type casting
   `echo '{"a": 42, "b": {}, "c": []}' | jq -c '.|= (.b |= objects | .c |= objects)'`
@@ -36,8 +41,7 @@ and ._id != "55d71c8ce4b02210dc47b10f"
 #and (.value.urls | type) != "object"
 ```
 
-
-## Iteration +2
+## Iteration +3
 - [ ] CLI interface
 - [ ] Documentation: Add Python example to "Synopsis" section on /index.html
 - [ ] Documentation: Compare with Seatunnel
@@ -55,7 +59,7 @@ Demonstrate more use cases, like...
   - https://github.com/MeltanoLabs/meltano-map-transform/issues/252
 - [ ] Use JSONPath, see https://sdk.meltano.com/en/v0.39.1/code_samples.html#use-a-jsonpath-expression-to-extract-the-next-page-url-from-a-hateoas-response
 
-## Iteration +3
+## Iteration +4
 - [ ] Moksha transformations on Buckets
 - [ ] Fluent API interface
   ```python
