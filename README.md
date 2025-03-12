@@ -14,13 +14,17 @@
 
 Tikray is a generic and compact **transformation engine** written in Python, for data
 decoding, encoding, conversion, translation, transformation, and cleansing purposes,
-to be used as a pipeline element for data pre- and/or post-processing.
+to be used as a pipeline element for data pre- or post-processing, or as a standalone
+converter program.
 
 ## Details
 
-A data model and implementation for a compact transformation engine written
-in [Python], based on [JSON Pointer] (RFC 6901), [JMESPath], and [transon],
-implemented using [attrs] and [cattrs].
+A data model and implementation for a compact transformation engine based on
+[JMESPath], [jq], [JSON Pointer] (RFC 6901), [transon], and [DWIM].
+
+The reference implementation is written in [Python], using [attrs] and [cattrs].
+The design, conventions, and definitions also encourage implementations
+in other programming languages.
 
 ## Installation
 
@@ -77,8 +81,7 @@ within the header sections of relevant files.
 [attrs]: https://www.attrs.org/
 [cattrs]: https://catt.rs/
 [DWIM]: https://en.wikipedia.org/wiki/DWIM
-[jp]: https://github.com/jmespath/jp
-[jq]: https://jqlang.github.io/jq/
+[jq]: https://jqlang.org/
 [jsonpointer]: https://python-json-pointer.readthedocs.io/en/latest/commandline.html
 [jqlang]: https://jqlang.github.io/jq/manual/
 [JMESPath]: https://jmespath.org/

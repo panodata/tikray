@@ -2,8 +2,8 @@
 
 ## About
 
-A data model and implementation for a compact transformation engine 
-based on [JSON Pointer] (RFC 6901), [JMESPath], [jq], [transon], and [DWIM].
+A data model and implementation for a compact transformation engine based on
+[JMESPath], [jq], [JSON Pointer] (RFC 6901), [transon], and [DWIM].
 
 The reference implementation is written in [Python], using [attrs] and [cattrs].
 The design, conventions, and definitions also encourage implementations
