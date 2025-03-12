@@ -43,6 +43,10 @@
 - https://github.com/MacHu-GWU/aws_sdk_polars-project
 - https://github.com/raw-labs/snapi
 - https://github.com/danthedeckie/simpleeval
+- https://github.com/mitghi/jetro
+- https://github.com/mahmoud/glom
+- https://github.com/hi-primus/optimus
+- https://github.com/hi-primus/bumblebee
 
 
 [AirbyteCatalog]: https://docs.airbyte.com/understanding-airbyte/beginners-guide-to-catalog
