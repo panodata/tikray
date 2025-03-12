@@ -1,0 +1,53 @@
+# A Zyp Transformation [1] project file to support importing
+# MongoDB collections from ACME [2] into CrateDB [3].
+#
+# The transformation recipe includes expressions mostly
+# written in jqlang [4], and can be used as a pipeline step
+# for data transfer operations, either standalone, or through
+# CrateDB Toolkit [5].
+#
+# Because CrateDB can not store different data substructures of MongoDB 1:1,
+# mostly revolving around dynamic schema evolution genesis, a few
+# transformations and treatments need to be applied to make the data import
+# work well and sensible.
+#
+# [1] https://tikray.readthedocs.io/
+# [2] {redacted}
+# [3] https://cratedb.com/database
+# [4] https://jqlang.github.io/jq/manual/
+# [5] https://cratedb-toolkit.readthedocs.io/io/mongodb/loader.html#zyp-transformations
+---
+
+meta:
+  type: tikray-project
+  version: 1
+  generator: commons-codec-v0.0.17
+
+collections:
+
+  # ------------------------------------------
+  # Collection: acme.conversation
+  # ------------------------------------------
+  - address:
+      container: acme
+      name: conversation
+
+    pre:
+      rules:
+
+        - expression: |
+            .[] |= (
+
+              # Use all documents.
+              select(true)
+
+              # Some early `.failures.code` elements are represented as integer numbers.
+              # Transform them to strings, to make them match the majority of codes.
+              | .failures[]?.code |= tostring
+
+              # Some early `.messages` elements are represented as objects.
+              # Later on, those objects are stored within arrays.
+              | .messages |= to_array
+
+            )
+          type: jq

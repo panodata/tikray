@@ -1,10 +1,35 @@
 # Tikray CLI
 
+## Install
+
+```shell
+uv tool install --upgrade --compile-bytecode 'tikray'
+```
+
 ## Synopsis
 
-Run data from `data.json` through transformation defined in `transformation.yaml`.
+Run data from input file `data.json` through transformation defined in
+`transformation.yaml`.
 ```shell
-tikray -t transformation.yaml -i data.json
+tikray \
+  --transformation=transformation.yaml \
+  --input=data.json
+```
+
+## Usage
+
+### Single collection
+
+Process a single collection / file.
+```shell
+tikray -t transformation-collection.yaml -i eai-warehouse.json
+```
+
+### Multiple collections
+
+Process multiple collections / files from a directory.
+```shell
+tikray -t examples/transformation-project.yaml -i examples/acme -o tmp/acme
 ```
 
 ## Example

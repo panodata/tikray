@@ -6,7 +6,11 @@ def to_array:
     if . | type == "array" then
         .
     else
-        [.]
+        if . then
+            [.]
+        else
+            []
+        end
     end;
 
 def to_object(options):
