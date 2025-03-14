@@ -1,9 +1,17 @@
 # Backlog
 
 ## Iteration +1
-- Support for JSONL
 - Read and write compressed files. orjson uses `xopen` already, which can do it transparently
 - Allow processing larger-than-memory files
+- Allow specifying chunk size
+- Docs: It is recommended to use JSONL/NDJSON files for processing, as they support streaming
+- Docs: Report about throughput. 5,000 batch size; Main memory 1 GB.
+  - GT: 11 GB input file; 1,300-1,800 records/s; 22 minutes total runtime; two simple jqlang expressions
+- Add `--overwrite` option
+- Docs: Convert from JSON to JSONL
+  ```shell
+  cat conversation.json | jq --compact-output '.[]' > conversation.jsonl
+  ```
 
 ## Iteration +2
 - [ ] Documentation: jqlang stdlib's `to_object` function for substructure management
@@ -94,3 +102,4 @@ Demonstrate more use cases, like...
 - [x] Model: Toggle rule active / inactive by respecting `disabled` flag
 - [x] Documentation: How to delete attributes from lists using jq?
 - [x] Review and test jqlang stdlib's `to_object` function
+- [x] Support for JSONL

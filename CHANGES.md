@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Core: Added streaming support for JSONL/NDJSON files
 
 ## 2025/03/12 v0.1.0
 - CLI: Added CLI interface, per `tikray` program

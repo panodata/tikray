@@ -27,19 +27,22 @@ def no_disabled_false(key, value):
 
 def load_json(path: Path, use_jsonl: bool = False) -> t.Any:
     if path.suffix in [".jsonl", ".ndjson"] or use_jsonl:
-        return orjsonl.load(path)
+        return orjsonl.stream(path)
     else:
         return orjson.loads(path.read_text())
 
 
-def save_json(data: t.Any, path: t.Optional[Path] = None, use_jsonl: bool = False) -> None:
+def save_json(data: t.Any, path: t.Optional[Path] = None, use_jsonl: bool = False, append: bool = False) -> None:
     # Sanity checks.
     if use_jsonl and not path:
         raise NotImplementedError("JSONL not supported on STDOUT yet, please raise an issue")
 
     # Output JSONL.
     if path and (path.suffix in [".jsonl", ".ndjson"] or use_jsonl):
-        orjsonl.save(path, data)
+        if append:
+            orjsonl.append(path, data)
+        else:
+            orjsonl.save(path, data)
 
     # Output JSON.
     elif path:
@@ -48,3 +51,31 @@ def save_json(data: t.Any, path: t.Optional[Path] = None, use_jsonl: bool = Fals
 
     else:
         sys.stdout.buffer.write(orjson.dumps(data))
+
+
+def lines_in_file(fname: t.Union[str, Path]) -> int:
+    """
+    https://stackoverflow.com/a/68385697
+    """
+
+    def _make_gen(reader):
+        while True:
+            b = reader(2**16)
+            if not b:
+                break
+            yield b
+
+    with open(fname, "rb") as f:
+        count = sum(buf.count(b"\n") for buf in _make_gen(f.raw.read))
+    return count
+
+
+def to_list(x: t.Any, default: t.List[t.Any] = None) -> t.Union[t.List[t.Any], None]:
+    if x is None:
+        return default
+    if not isinstance(x, t.Iterable) or isinstance(x, str):
+        return [x]
+    elif isinstance(x, list):
+        return x
+    else:
+        return list(x)

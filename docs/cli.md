@@ -53,6 +53,10 @@ tikray -t transformation.yaml -i input.jsonl
 ```shell
 tikray -t transformation.yaml -i input.json -a acme.conversation --jsonl -o output.jsonl
 ```
+:::{tip}
+This is the recommended way to use Tikray on JSON files, as it provides
+support for processing larger-than-memory files, by using streaming.
+:::
 
 
 ## Example

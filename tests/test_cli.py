@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import orjsonl
 from tikray.cli import cli
 
 eai_warehouse_reference = [
@@ -8,7 +9,7 @@ eai_warehouse_reference = [
     {"id": 34, "meta": {"name": "bar", "location": "BY"}, "data": {"value": -84.01}},
 ]
 
-acme_conversation_reference = json.loads((Path("tests") / "examples" / "conversation.json").read_text())
+acme_conversation_reference = json.loads((Path("tests") / "examples" / "output" / "conversation.json").read_text())
 
 
 def test_cli_collection_stdout_success(cli_runner):
@@ -75,9 +76,9 @@ def test_cli_project_success(cli_runner, tmp_path):
     assert output == acme_conversation_reference
 
 
-def test_cli_collection_from_project_file_success(cli_runner, tmp_path):
+def test_cli_collection_from_project_file_json_success(cli_runner, tmp_path):
     """
-    CLI test: Single resource from Tikray project file.
+    CLI test: Single resource from Tikray project file. JSON format.
     """
 
     result = cli_runner.invoke(
@@ -87,6 +88,24 @@ def test_cli_collection_from_project_file_success(cli_runner, tmp_path):
     )
     assert result.exit_code == 0
     data = json.loads(result.output)
+    assert data == acme_conversation_reference
+
+
+def test_cli_collection_from_project_file_jsonl_success(cli_runner, tmp_path):
+    """
+    CLI test: Single resource from Tikray project file. JSONL/NDJSON format.
+    """
+    outfile = tmp_path / "conversation.jsonl"
+    result = cli_runner.invoke(
+        cli,
+        args=f"-t examples/transformation-project.yaml "
+        f"-i tests/examples/input/conversation.jsonl "
+        f"-a acme.conversation "
+        f"-o {outfile}",
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 0
+    data = orjsonl.load(outfile)[0]
     assert data == acme_conversation_reference
 
 

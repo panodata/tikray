@@ -24,7 +24,7 @@ def cli(ctx: click.Context, transformation: Path, input_: Path, output: Path, ad
     type_ = tdata["meta"]["type"]
 
     if type_ in ["tikray-collection", "zyp-collection"] or address is not None:  # noqa: RET506
-        return process_collection(transformation, input_, output, address, jsonl)
+        process_collection(transformation, input_, output, address, jsonl)
 
     elif type_ in ["tikray-project", "zyp-project"]:
         if not input_.is_dir():
@@ -33,7 +33,7 @@ def cli(ctx: click.Context, transformation: Path, input_: Path, output: Path, ad
             raise click.ClickException("Processing multiple collections requires an output directory")
         if not output.is_dir():
             raise click.ClickException(f"Output is not a directory: {output}")
-        return process_project(transformation, input_, output, jsonl)
+        process_project(transformation, input_, output, jsonl)
 
     else:
         raise NotImplementedError(f"Unknown transformation type: {type_}")
