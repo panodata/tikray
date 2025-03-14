@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## 2025/03/14 v0.2.0
 - Core: Added streaming support for JSONL/NDJSON files
 
 ## 2025/03/12 v0.1.0
