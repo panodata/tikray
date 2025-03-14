@@ -1,0 +1,4 @@
+{"_id":{"$oid":"82a1fcd6448282738e9178c2"},"failures":[{"_id":{"$oid":"82a1fcd5b849a9d6a9748e8d"}}]}
+{"_id":{"$oid":"82a4549b497282738ed19f7d"},"failures":[{"code":500,"reason":"foobar not implemented","_id":{"$oid":"82a4549a32c82346ebdb1052"}}]}
+{"_id":{"$oid":"6386e10cb1233ae3298b81a9"},"failures":[{"code":"success-pending","reason":"Ineligible for API, insufficient permissions"},{"code":"success-pending","reason":"Ineligible for API, go away"}],"messages":{"category":"premium","message":"More info required"}}
+{"_id":{"$oid":"6386e10cb8743ae3298b81a9"},"failures":[{"code":"Information","reason":"No billing information"}],"messages":[{"category":"carrier","message":"This item is currently being reviewed by the carrier."}]}
