@@ -54,7 +54,6 @@ def process_collection(
     if isinstance(data, t.Generator):
         progress = tqdm(total=lines)
         for chunk in partition_all(5_000, data):
-            logger.info(f"chunk: {chunk}")
             result = ct.apply(chunk)
             save_json(result, output, use_jsonl=use_jsonl, append=True)
             progress.update(len(chunk))
