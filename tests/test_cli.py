@@ -93,7 +93,7 @@ def test_cli_collection_from_project_file_json_success(cli_runner, tmp_path):
 
 def test_cli_collection_from_project_file_jsonl_success(cli_runner, tmp_path):
     """
-    CLI test: Single resource from Tikray project file. JSONL/NDJSON format.
+    CLI test: Single resource from Tikray project file. JSONL / NDJSON format.
     """
     outfile = tmp_path / "conversation.jsonl"
     result = cli_runner.invoke(
@@ -132,12 +132,26 @@ def test_cli_project_warning_no_transformation(cli_runner, tmp_path, caplog):
     )
 
 
-def test_cli_without_options_fail(cli_runner):
+def test_cli_without_input_option_fail(cli_runner):
     """
     CLI test: Invoke `tikray` without any options passed.
     """
     result = cli_runner.invoke(
         cli,
+        args="-t examples/transformation-collection.yaml",
+        catch_exceptions=False,
+    )
+    assert result.exit_code == 2
+    assert "Error: Missing option '--input' / '-i'." in result.output
+
+
+def test_cli_without_transformation_option_fail(cli_runner):
+    """
+    CLI test: Invoke `tikray` without any options passed.
+    """
+    result = cli_runner.invoke(
+        cli,
+        args="-i examples/transformation-project.yaml",
         catch_exceptions=False,
     )
     assert result.exit_code == 2
