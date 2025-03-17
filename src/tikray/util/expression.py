@@ -19,11 +19,11 @@ jq_functions_path = resource_files("tikray")
 jq_functions_import = f'include "function" {{"search": "{jq_functions_path}"}};'
 
 
-def compile_expression(type: str, expression: t.Union[str, TransonTemplate]) -> MokshaTransformer:  # noqa: A002
+def compile_expression(type: str, expression: t.Union[str, TransonTemplate], **kwargs) -> MokshaTransformer:  # noqa: A002
     if type == "jmes":
         return jmespath.compile(expression)
     elif type == "jq":
-        return jq.compile(f"{jq_functions_import} {expression}")
+        return jq.compile(f"{jq_functions_import} {expression}", **kwargs)
     elif type == "transon":
         return transon.Transformer(expression)
     else:
