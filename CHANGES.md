@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+
+## 2025/03/17 v0.2.1
+- Chore: Remove silly log statement
 - Update documentation
 - Adjust wording. Improve tests. Add API example.
 - Rename: `TransformationProject` -> `ProjectTransformation`
