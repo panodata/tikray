@@ -74,10 +74,26 @@ in other programming languages.
 
 ## Usage
 
-```{toctree}
-:maxdepth: 2
+In order to learn how to use Tikray, please explore the introductory documentation
+resources, and the items in its ["examples" directory], or its [software tests],
+in order to get further inspirations that might not have been reflected on the
+documentation yet.
 
+```{toctree}
+:maxdepth: 1
+:caption: Usage
+
+install
+introduction
 cli
+tools
+```
+
+```{toctree}
+:maxdepth: 1
+:caption: Engines
+
+engine/jqlang/index
 ```
 
 ## Synopsis
@@ -143,27 +159,14 @@ post:
 ::::
 
 
-## Example Gallery
-
-In order to learn how to use Tikray, please explore the hands-on example gallery.
-```{toctree}
-:maxdepth: 2
-
-Examples <examples>
-```
-You are also welcome to explore and inspect the software test cases to get further
-inspirations that might not have been reflected on the documentation yet.
-
 ## Tools
 
-- [jp]: A command line interface to JMESPath, an expression language for manipulating JSON.
-- [jq]: A lightweight and flexible command-line JSON processor.
-- [jsonpointer]: A commandline utility that can be used to resolve JSON pointers on JSON files.
+See {ref}`tools`.
 
 ## Prior Art
 
-See {ref}`research and development notes <research>`,
-specifically [an introduction and overview about Singer].
+See {ref}`Tikray research and development notes <research>`
+and [an introduction and overview about Singer].
 
 ## Etymology
 
@@ -173,6 +176,7 @@ with kudos to [Kris Zyp] for conceiving [JSON Pointer].
 
 ```{toctree}
 :maxdepth: 1
+:caption: Development
 :hidden:
 
 Changelog <changes>
@@ -182,17 +186,17 @@ Backlog <backlog>
 
 
 
-[An introduction and overview about Singer]: https://github.com/daq-tools/lorrystream/blob/main/doc/singer/intro.md
+[An introduction and overview about Singer]: https://lorrystream.readthedocs.io/singer/intro.html
 [attrs]: https://www.attrs.org/
 [cattrs]: https://catt.rs/
 [DWIM]: https://en.wikipedia.org/wiki/DWIM
+["examples" directory]: https://github.com/panodata/tikray/tree/main/examples
 [Kris Zyp]: https://github.com/kriszyp
 [Quechua language]: https://en.wikipedia.org/wiki/Quechua_language
-[jp]: https://github.com/jmespath/jp
 [jq]: https://jqlang.github.io/jq/
-[jsonpointer]: https://python-json-pointer.readthedocs.io/en/latest/commandline.html
 [jqlang]: https://jqlang.github.io/jq/manual/
 [JMESPath]: https://jmespath.org/
 [JSON Pointer]: https://datatracker.ietf.org/doc/html/rfc6901
 [Python]: https://en.wikipedia.org/wiki/Python_(programming_language)
+[software tests]: https://github.com/panodata/tikray/tree/main/tests
 [transon]: https://transon-org.github.io/

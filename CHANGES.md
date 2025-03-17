@@ -1,14 +1,15 @@
 # Changelog
 
 ## Unreleased
+- Update documentation
 
 ## 2025/03/14 v0.2.0
-- Core: Added streaming support for JSONL/NDJSON files
+- Core: Added streaming support for JSONL / NDJSON files
 
 ## 2025/03/12 v0.1.0
 - CLI: Added CLI interface, per `tikray` program
 - Core: Started using `orjson` and `orjsonl` packages, for performance
-  reasons and JSONL/NDJSON support
+  reasons and JSONL / NDJSON support
 - Core: Optionally invoke single resource on project file
 
 ## 2025/02/05 v0.0.23

@@ -42,7 +42,7 @@ html_theme = "furo"
 # further.  For a list of options available for each theme, see the
 # documentation.
 
-html_title = "tikray"
+html_title = "Tikray"
 
 html_theme_options = {
     "sidebar_hide_name": False,
@@ -102,7 +102,7 @@ todo_include_todos = True
 # Configure sphinx-copybutton
 copybutton_remove_prompts = True
 copybutton_line_continuation_character = "\\"
-copybutton_prompt_text = r">>> |\.\.\. |\$ |sh\$ |PS> |cr> |mysql> |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: "
+copybutton_prompt_text = r">>> |\.\.\. |\$ |sh\$ |PS> |cr> |mysql> |In \[\d*\]: | {2,5}\.\.\.: | {5,8}: |expression: "
 copybutton_prompt_is_regexp = True
 
 # Configure sphinxext-opengraph
