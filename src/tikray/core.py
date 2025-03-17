@@ -6,7 +6,7 @@ from toolz import partition_all
 from tqdm import tqdm
 
 from tikray.model.collection import CollectionAddress, CollectionTransformation
-from tikray.model.project import TransformationProject
+from tikray.model.project import ProjectTransformation
 from tikray.util.data import lines_in_file, load_json, save_json
 
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def process_project(transformation: Path, input_: Path, output: Path, use_jsonl: bool = False) -> None:
     logger.info(f"Using transformation '{transformation}' on multi-collection input '{input_}'")
 
-    project = TransformationProject.from_yaml(transformation.read_text())
+    project = ProjectTransformation.from_yaml(transformation.read_text())
     for item in input_.iterdir():
         logger.info(f"Processing input: {item}")
         address = CollectionAddress(container=item.parent.name, name=item.stem)
@@ -40,7 +40,7 @@ def process_collection(
     logger.info(f"Using transformation '{transformation}' on single-collection input '{input_}'")
     ct = CollectionTransformation.from_yaml(transformation.read_text())
     if address is not None:
-        pt = TransformationProject.from_yaml(transformation.read_text())
+        pt = ProjectTransformation.from_yaml(transformation.read_text())
         ct = pt.get(CollectionAddress(*address.split(".")))
     logger.info(f"Processing input: {input_}")
     lines = lines_in_file(input_)
