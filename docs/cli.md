@@ -1,36 +1,37 @@
-# Tikray CLI
+# `tikray` CLI
 
-## Install
-
-```shell
-uv tool install --upgrade --compile-bytecode 'tikray'
-```
+The command-line interface to the Tikray transformation engine.
 
 ## Synopsis
 
 Run data from input file `data.json` through transformation defined in
-`transformation.yaml`.
+`transformation.yaml`. Emit result to stdout.
 ```shell
 tikray \
-  --transformation=transformation.yaml \
-  --input=data.json
+  --transformation="transformation.yaml" \
+  --input="data.json"
 ```
 
 ## Usage
 
-### Single collection
+### Single file (collection)
 
 Process a single resource (collection, file) using a Tikray collection transformation.
 ```shell
-tikray -t transformation-collection.yaml -i eai-warehouse.json
+tikray \
+  -t examples/transformation-collection.yaml \
+  -i examples/eai-warehouse.json
 ```
 
-### Multiple collections
+### Multiple files (project)
 
 Process multiple resources (collections, files) from a directory.
 The Tikray project file enumerates multiple transformation rules per resource.
 ```shell
-tikray -t examples/transformation-project.yaml -i examples/acme -o tmp/acme
+tikray \
+  -t examples/transformation-project.yaml \
+  -i examples/acme \
+  -o tmp/acme
 ```
 
 If you are using a Tikray project file, but would like to only invoke a
@@ -38,25 +39,30 @@ single-resource transformation on it, you need to explicitly specify the
 resource address using `--address`/`-a`, so the engine will only select
 this particular collection.
 ```shell
-tikray -t examples/transformation-project.yaml -i examples/acme/conversation.json -a acme.conversation
+tikray \
+  -t examples/transformation-project.yaml \
+  -i examples/acme/conversation.json \
+  -a acme.conversation
 ```
 
 ### JSONL support
 
-Tikray supports reading and writing the JSONL/NDJSON format, i.e. newline-
-delimited JSON. Tikray will automatically use this mode if it receives
-input files suffixed with `.jsonl` or `.ndjson`, or if you explicitly
-toggle the mode per `--jsonl` option flag.
+Tikray supports reading and writing the JSONL / NDJSON format, where individual
+JSON records are delimited by newlines. This mode will be automatically enabled
+when receiving input files suffixed with `.jsonl` or `.ndjson`, or if you
+explicitly toggle it per `--jsonl` option flag.
+
+It is the recommended way to use Tikray, because it provides
+support for processing larger-than-memory files, by using streaming.
+
+Process input JSONL file, emit result to stdout.
 ```shell
 tikray -t transformation.yaml -i input.jsonl
 ```
+Process input JSON file as JSONL, emit result to designated output file.
 ```shell
-tikray -t transformation.yaml -i input.json -a acme.conversation --jsonl -o output.jsonl
+tikray -t transformation.yaml -i input.json --jsonl -o output.jsonl
 ```
-:::{tip}
-This is the recommended way to use Tikray on JSON files, as it provides
-support for processing larger-than-memory files, by using streaming.
-:::
 
 
 ## Example

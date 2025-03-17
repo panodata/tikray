@@ -1,6 +1,18 @@
+# A Tikray collection transformation [1] file.
+#
+# The transformation recipe includes expressions mostly
+# written in jqlang [2], and can be used as a pipeline step
+# within data transfer operations, either standalone, or through
+# corresponding SDKs.
+#
+# [1] https://tikray.readthedocs.io/
+# [2] https://jqlang.github.io/jq/manual/
+---
+
 meta:
-  version: 1
   type: tikray-collection
+  version: 1
+  generator: tikray-v0.0.17
 pre:
   rules:
   - expression: records[?not_null(meta.location) && !starts_with(meta.location, 'N')]

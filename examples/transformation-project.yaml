@@ -1,27 +1,19 @@
-# A Zyp Transformation [1] project file to support importing
-# MongoDB collections from ACME [2] into CrateDB [3].
+# A Tikray project transformation [1] file for harmonizing structural
+## differences on a single JSON file.
 #
 # The transformation recipe includes expressions mostly
-# written in jqlang [4], and can be used as a pipeline step
-# for data transfer operations, either standalone, or through
-# CrateDB Toolkit [5].
-#
-# Because CrateDB can not store different data substructures of MongoDB 1:1,
-# mostly revolving around dynamic schema evolution genesis, a few
-# transformations and treatments need to be applied to make the data import
-# work well and sensible.
+# written in jqlang [2], and can be used as a pipeline step
+# within data transfer operations, either standalone, or through
+# corresponding SDKs.
 #
 # [1] https://tikray.readthedocs.io/
-# [2] {redacted}
-# [3] https://cratedb.com/database
-# [4] https://jqlang.github.io/jq/manual/
-# [5] https://cratedb-toolkit.readthedocs.io/io/mongodb/loader.html#zyp-transformations
+# [2] https://jqlang.github.io/jq/manual/
 ---
 
 meta:
   type: tikray-project
   version: 1
-  generator: commons-codec-v0.0.17
+  generator: tikray-v0.0.17
 
 collections:
 
