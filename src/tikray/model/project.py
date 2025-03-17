@@ -8,7 +8,7 @@ from tikray.model.collection import CollectionAddress, CollectionTransformation
 
 
 @define
-class TransformationProject(Dumpable):
+class ProjectTransformation(Dumpable):
     meta: Metadata = Metadata(version=1, type="tikray-project")
     collections: t.List[CollectionTransformation] = Factory(list)
     _map: t.Dict[CollectionAddress, CollectionTransformation] = Factory(dict)
@@ -18,13 +18,13 @@ class TransformationProject(Dumpable):
             for collection in self.collections:
                 self._add(collection)
 
-    def _add(self, collection: CollectionTransformation) -> "TransformationProject":
+    def _add(self, collection: CollectionTransformation) -> "ProjectTransformation":
         if collection is None or collection.address is None:
             raise ValueError("CollectionTransformation or address missing")
         self._map[collection.address] = collection
         return self
 
-    def add(self, collection: CollectionTransformation) -> "TransformationProject":
+    def add(self, collection: CollectionTransformation) -> "ProjectTransformation":
         self.collections.append(collection)
         return self._add(collection)
 

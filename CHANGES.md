@@ -3,6 +3,7 @@
 ## Unreleased
 - Update documentation
 - Adjust wording. Improve tests. Add API example.
+- Rename: `TransformationProject` -> `ProjectTransformation`
 
 ## 2025/03/14 v0.2.0
 - Core: Added streaming support for JSONL / NDJSON files
