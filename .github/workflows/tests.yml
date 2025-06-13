@@ -3,7 +3,7 @@ name: "Tests"
 on:
   push:
     branches: [ main ]
-  pull_request: ~
+  pull_request:
   workflow_dispatch:
 
 concurrency:
@@ -22,7 +22,6 @@ jobs:
       matrix:
         os: ['ubuntu-latest']
         python-version: [
-          '3.8',
           '3.9',
           '3.12',
           '3.13',
@@ -63,12 +62,7 @@ jobs:
           timezoneMacos: "Europe/Berlin"
           timezoneWindows: "European Standard Time"
 
-      - name: Run software tests
-        if: ${{ matrix.python-version == '3.8' }}
-        run: poe test
-
       - name: Run linters and software tests
-        if: ${{ matrix.python-version != '3.8' }}
         run: poe check
 
       # https://github.com/codecov/codecov-action
