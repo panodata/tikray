@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Fixed missing `function.jq` due to packaging flaw
 
 ## 2025/03/17 v0.2.1
 - Chore: Remove silly log statement
