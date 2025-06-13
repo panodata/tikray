@@ -9,6 +9,7 @@
   - GT: 11 GB input file; 1,300-1,800 records/s; 22 minutes total runtime; two simple jqlang expressions
 - Add `--overwrite` option
 - Unlock providing variable names per --arg, --argjson, --slurpfile, --rawfile, --args, --jsonargs
+- Make use of https://github.com/ashb/jqrepl?
 
 ## Iteration +2
 - [ ] Documentation: jqlang stdlib's `to_object` function for substructure management
@@ -24,6 +25,7 @@
 - [ ] Documentation: Update "What’s Inside"
 - [ ] Documentation: Usage (build (API, from_yaml), apply)
 - [ ] Documentation: How to extend `function.{jq,py}`
+- https://arrow.apache.org/docs/cpp/gandiva.html
 
 ### Documentation
 ```
