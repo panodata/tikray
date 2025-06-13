@@ -63,7 +63,12 @@ jobs:
           timezoneMacos: "Europe/Berlin"
           timezoneWindows: "European Standard Time"
 
+      - name: Run software tests
+        if: ${{ matrix.python-version == '3.8' }}
+        run: poe test
+
       - name: Run linters and software tests
+        if: ${{ matrix.python-version != '3.8' }}
         run: poe check
 
       # https://github.com/codecov/codecov-action
