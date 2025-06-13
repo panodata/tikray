@@ -274,8 +274,9 @@ non_interactive = true
 # enable_recursive_aliases = true
 
 [tool.versioningit.vcs]
-method = "git"
-default-tag = "0.0.0"
+method = "git-archive"
+default-tag = "v0.0.0"
+describe-subst = "$Format:%(describe:tags,match=v*)$"
 
 # ===================
 # Tasks configuration
