@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 
 import orjsonl
+
 from tikray.cli import cli
 
 eai_warehouse_reference = [
