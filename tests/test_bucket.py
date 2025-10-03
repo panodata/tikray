@@ -6,6 +6,7 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
+
 from tikray.model.base import SchemaDefinition
 from tikray.model.bucket import (
     BucketTransformation,

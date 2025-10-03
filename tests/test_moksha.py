@@ -7,6 +7,7 @@ from copy import deepcopy
 
 import pytest
 from jmespath.exceptions import ParseError
+
 from tikray.model.moksha import MokshaRule, MokshaTransformation
 
 

@@ -144,7 +144,7 @@ urls.Repository = "https://github.com/panodata/tikray"
 scripts.tikray = "tikray.cli:cli"
 
 [tool.setuptools.package-data]
-tikray = ["*.jq"]
+tikray = [ "*.jq" ]
 
 [tool.black]
 line-length = 120

@@ -6,6 +6,7 @@ import jsonpointer
 import orjsonl
 import pytest
 import transon
+
 from tikray.util.data import load_json, save_json, to_list
 from tikray.util.expression import compile_expression
 from tikray.util.locator import to_pointer

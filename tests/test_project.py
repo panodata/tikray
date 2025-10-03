@@ -1,6 +1,7 @@
 import sys
 
 import pytest
+
 from tikray.model.collection import CollectionAddress, CollectionTransformation
 from tikray.model.project import ProjectTransformation
 
