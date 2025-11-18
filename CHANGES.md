@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Added `rsonpath` transformations using `rsonpy`
 
 ## 2025/05/13 v0.2.2
 - Fixed missing `function.jq` due to packaging flaw

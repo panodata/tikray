@@ -1,5 +1,7 @@
 import sys
 
+from tikray.util.rson import RsonTransformer
+
 if sys.version_info >= (3, 10):
     from importlib.resources import files as resource_files
 else:  # pragma: no cover
@@ -24,7 +26,9 @@ def compile_expression(type: str, expression: t.Union[str, TransonTemplate], **k
         return jmespath.compile(expression)
     elif type == "jq":
         return jq.compile(f"{jq_functions_import} {expression}", **kwargs)
+    elif type == "rson":
+        return RsonTransformer(t.cast(str, expression), **kwargs)
     elif type == "transon":
         return transon.Transformer(expression)
     else:
-        raise TypeError(f"Compilation failed. Type must be either jmes or jq or transon: {type}")
+        raise TypeError(f"Compilation failed. Type must be one of [jmes, jq, rson, transon]: {type}")
