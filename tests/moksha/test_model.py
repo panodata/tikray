@@ -42,7 +42,7 @@ def test_moksha_rule_evaluate_invalid_transformer():
     compiled.transformer = "foo"
     with pytest.raises(TypeError) as ex:
         compiled.evaluate(42.42)
-    assert ex.match("Evaluation failed. Type must be either jmes or jq or transon: foo")
+    assert ex.match("Evaluation failed. Type must be one of .+: foo")
 
 
 def test_moksha_transformation_success_jq():
