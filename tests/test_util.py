@@ -52,7 +52,7 @@ def test_compile_expression_transon():
 def test_compile_expression_unknown():
     with pytest.raises(TypeError) as ex:
         compile_expression(type="foobar", expression=None)
-    assert ex.match("Compilation failed. Type must be either jmes or jq or transon: foobar")
+    assert ex.match("Compilation failed. Type must be one of .+: foobar")
 
 
 @pytest.mark.parametrize("input_", ["examples/acme/conversation.json", "examples/eai-warehouse.json"])

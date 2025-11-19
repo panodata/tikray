@@ -11,13 +11,58 @@ from jmespath.exceptions import ParseError
 from tikray.model.moksha import MokshaRule, MokshaTransformation
 
 
-def test_moksha_jq_idempotency():
+def test_moksha_jq_idempotency_object():
+    """
+    Idempotent transformations should not modify data.
+    """
+    data = {"foo": "bar"}
+    transformation = MokshaTransformation().jq(".")
+    assert transformation.apply(deepcopy(data)) == data
+
+
+def test_moksha_jq_idempotency_list():
     """
     Idempotent transformations should not modify data.
     """
     data = [{"foo": "bar"}, {"baz": "qux"}]
     transformation = MokshaTransformation().jq(".")
     assert transformation.apply(deepcopy(data)) == data
+
+
+def test_moksha_rson_idempotency_object():
+    """
+    Idempotent transformations should not modify data.
+    """
+    data = {"foo": "bar"}
+    transformation = MokshaTransformation().rson("$")
+    assert transformation.apply(deepcopy(data)) == data
+
+
+def test_moksha_rson_idempotency_list():
+    """
+    Idempotent transformations should not modify data.
+    """
+    data = [{"foo": "bar"}, {"baz": "qux"}]
+    transformation = MokshaTransformation().rson("$")
+    assert transformation.apply(deepcopy(data)) == data
+
+
+def test_moksha_jq_slice():
+    """
+    A little bit of slicing.
+    """
+    data = [{"foo": "bar"}, {"baz": "qux"}]
+    transformation = MokshaTransformation().jq(".[].foo")
+    assert transformation.apply(deepcopy(data)) == "bar"
+
+
+def test_moksha_rson_slice():
+    """
+    A little bit of slicing.
+    """
+    data = [{"foo": "bar"}, {"baz": "qux"}]
+    transformation = MokshaTransformation().rson("$.*.foo")
+    assert transformation.apply(deepcopy(data)) == "bar"
 
 
 def test_moksha_jq_select_pick_keys():
@@ -209,7 +254,7 @@ def test_moksha_runtime_rule_invalid_transformer():
     rule.transformer = "foo"
     with pytest.raises(TypeError) as ex:
         rule.evaluate(42.42)
-    assert ex.match("Evaluation failed. Type must be either jmes or jq or transon: foo")
+    assert ex.match("Evaluation failed. Type must be one of .+: foo")
 
 
 def test_moksha_empty():
@@ -223,6 +268,10 @@ def test_moksha_empty():
     with pytest.raises(ValueError) as ex:
         MokshaTransformation().jq("")
     assert ex.match("jq expression cannot be empty")
+
+    with pytest.raises(ValueError) as ex:
+        MokshaTransformation().rson("")
+    assert ex.match("rson expression cannot be empty")
 
     with pytest.raises(ValueError) as ex:
         MokshaTransformation().transon("")
