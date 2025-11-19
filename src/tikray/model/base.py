@@ -5,6 +5,7 @@ import attr
 import toolz
 from attr import Factory
 from attrs import define
+from cattrs.fns import raise_error
 from cattrs.preconf.json import make_converter as make_json_converter
 from cattrs.preconf.pyyaml import make_converter as make_yaml_converter
 
@@ -50,6 +51,12 @@ class SchemaDefinition:
         return self
 
 
+# Restore the old "lazy" default structure hook fallback factory for cattrs 25 and higher.
+# https://catt.rs/en/latest/migrations.html#the-default-structure-hook-fallback-factory
+json_converter = make_json_converter(dict_factory=OrderedDict, structure_fallback_factory=lambda _: raise_error)
+yaml_converter = make_yaml_converter(dict_factory=OrderedDict, structure_fallback_factory=lambda _: raise_error)
+
+
 @define
 class Dumpable:
     meta: t.Union[Metadata, None] = None
@@ -61,12 +68,10 @@ class Dumpable:
         return attr.asdict(self, dict_factory=OrderedDict, filter=filter_)
 
     def to_json(self) -> str:
-        converter = make_json_converter(dict_factory=OrderedDict)
-        return converter.dumps(self.to_dict())
+        return json_converter.dumps(self.to_dict())
 
     def to_yaml(self) -> str:
-        converter = make_yaml_converter(dict_factory=OrderedDict)
-        return converter.dumps(self.to_dict())
+        return yaml_converter.dumps(self.to_dict())
 
     @classmethod
     def from_dict(cls, data: t.Dict[str, t.Any]):
@@ -75,10 +80,8 @@ class Dumpable:
 
     @classmethod
     def from_json(cls, json_str: str):
-        converter = make_json_converter(dict_factory=OrderedDict)
-        return converter.loads(json_str, cls)
+        return json_converter.loads(json_str, cls)
 
     @classmethod
     def from_yaml(cls, yaml_str: str):
-        converter = make_yaml_converter(dict_factory=OrderedDict)
-        return converter.loads(yaml_str, cls)
+        return yaml_converter.loads(yaml_str, cls)

@@ -5,6 +5,7 @@
 ## 2025/05/13 v0.2.2
 - Fixed missing `function.jq` due to packaging flaw
 - Removed support for Python 3.8
+- Dependencies: Updated to cattrs 25
 
 ## 2025/03/17 v0.2.1
 - Chore: Remove silly log statement
