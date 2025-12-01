@@ -108,7 +108,7 @@ dependencies = [
   "transon==0.0.7",
 ]
 optional-dependencies.develop = [
-  "mypy<1.19",
+  "mypy<1.20",
   "poethepoet<1",
   "pyproject-fmt<3",
   "ruff<0.15",
