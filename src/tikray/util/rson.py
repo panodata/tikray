@@ -11,24 +11,9 @@ class RsonTransformer:
     - https://github.com/rsonquery/rsonpath
     - https://github.com/rsonquery/rsonpy
 
-    This is a little wrapper to make rsonpy transformations fit the processing
-    style/interface of the other transformation modules, which is mostly list-first.
-
-    That also matches usual applications like processing JSONL/NDJSON data, which
-    are streaming multiple records instead of just crunching single documents.
-
-    Here, because rson currently just offers an interface that accepts
-    `object`-type root documents, the wrapper needs to conduct a few
-    workarounds that obviously include too many code smells to make it
-    into a bearable implementation, see below.
-
-    However, the wrapper currently satisfies a few basic test
-    cases of the test suite (idempotency and simple slicing),
-    mirroring the corresponding jqlang-based test cases,
-    so, thanks for all the fish.
-
-    -- https://www.youtube.com/watch?v=aB_9bP21Xxs
-    -- https://www.youtube.com/watch?v=waq6EfRhoqg
+    The wrapper currently satisfies just a few basic test cases of the test suite
+    in `test_moksha.py` (idempotency and simple slicing), mirroring the corresponding
+    jqlang-based test cases.
     """
 
     def __init__(self, expression: str, **kwargs):
@@ -36,32 +21,14 @@ class RsonTransformer:
 
     def transform(self, data: t.Any):
         """
-        Apply rson transformation, with workaround for lists as input data.
+        Apply rson transformation.
         """
-        expression = self.expression
-
-        if isinstance(data, dict):
-            return self.rson_transform(data, self.expression)
-
-        # Wrap the input data into a root document, and adjust the expression correspondingly.
-        data = {"__root__": data}
-        if expression.startswith("$."):
-            expression = "$.__root__." + expression[2:]
-
-        # Apply transformation.
-        payload = self.rson_transform(data, expression)
-
-        # If the root document wrapper comes through, for example
-        # on the idempotency operation, remove it again.
-        if "__root__" in payload:
-            return payload["__root__"]
-
-        return payload
+        return self.rson_transform(data, self.expression)
 
     @staticmethod
     def rson_transform(data: t.Any, expression: str) -> t.Any:
         """
-        Invoke the rsonpy module for conducting the transformation.
+        Invoke the rsonpy module for conducting the transformation, using the `orjson` JSON serializer.
 
         FIXME: Because rsonpy currently only provides a string-based interface,
                the code needs to nest a few encoders and decoders.
@@ -76,7 +43,7 @@ class RsonTransformer:
               produces multiple items, but c'est la vie for the time being.
               In any case, evaluate if the procedure is sound, or if using `list()`
               would be correct to produce multiple items wrapped into a sequence.
-              In this case however, it would be difficult to receive single scalar
+              In this case however, it might be difficult to receive single scalar
               values from a transformation, which is currently possible.
         """
         return next(rsonpy.loads(orjson.dumps(data).decode(), expression, json_loader=orjson.loads))
