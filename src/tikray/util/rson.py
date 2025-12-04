@@ -46,4 +46,7 @@ class RsonTransformer:
               In this case however, it might be difficult to receive single scalar
               values from a transformation, which is currently possible.
         """
-        return next(rsonpy.loads(orjson.dumps(data).decode(), expression, json_loader=orjson.loads))
+        try:
+            return next(rsonpy.loads(orjson.dumps(data).decode(), expression, json_loader=orjson.loads))
+        except StopIteration:
+            return None

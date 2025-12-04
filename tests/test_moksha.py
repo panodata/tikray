@@ -47,6 +47,24 @@ def test_moksha_rson_idempotency_list():
     assert transformation.apply(deepcopy(data)) == data
 
 
+def test_moksha_jq_no_match():
+    """
+    Use `jq`, but no match.
+    """
+    data = [{"foo": "bar"}]
+    transformation = MokshaTransformation().jq(".[].unknown")
+    assert transformation.apply(deepcopy(data)) is None
+
+
+def test_moksha_rson_no_match():
+    """
+    Use `rsonpath`, but no match.
+    """
+    data = [{"foo": "bar"}]
+    transformation = MokshaTransformation().rson("$.*.unknown")
+    assert transformation.apply(deepcopy(data)) is None
+
+
 def test_moksha_jq_slice():
     """
     A little bit of slicing.
