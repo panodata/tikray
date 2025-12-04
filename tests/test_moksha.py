@@ -1,5 +1,5 @@
 """
-Exercise a few transformation recipes using `jq`.
+Exercise a few transformation recipes using `jq` and `rsonpath`.
 https://github.com/jqlang/jq/blob/master/src/builtin.jq
 """
 

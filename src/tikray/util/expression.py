@@ -21,7 +21,14 @@ jq_functions_path = resource_files("tikray")
 jq_functions_import = f'include "function" {{"search": "{jq_functions_path}"}};'
 
 
+ALLOWED_EXPRESSION_TYPES = ["jmes", "jq", "rson", "transon"]
+
+
 def compile_expression(type: str, expression: t.Union[str, TransonTemplate], **kwargs) -> MokshaTransformer:  # noqa: A002
+    """
+    Compile any type of expression.
+    """
+    # Dispatch to the corresponding compiler lazily, only select the requested one.
     if type == "jmes":
         return jmespath.compile(expression)
     elif type == "jq":
@@ -31,4 +38,4 @@ def compile_expression(type: str, expression: t.Union[str, TransonTemplate], **k
     elif type == "transon":
         return transon.Transformer(expression)
     else:
-        raise TypeError(f"Compilation failed. Type must be one of [jmes, jq, rson, transon]: {type}")
+        raise TypeError(f"Compilation failed. Type must be one of [{', '.join(ALLOWED_EXPRESSION_TYPES)}]: {type}")

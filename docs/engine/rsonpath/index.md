@@ -19,7 +19,7 @@ and specifically the [JSONPath reference].
 :::{rubric} Use cases
 :::
 
-> Rsonpath is made to filter document ahead of parsing/loading. Think of
+> Rsonpath is made to filter documents ahead of parsing/loading. Think of
 it like a way to select a small part of the documents before
 loading it into memory. It will shine in situations where you have a
 JSON file too big to hold in memory, but you nevertheless want to load
@@ -59,8 +59,9 @@ metadata. In this spirit, when connecting pipeline elements of JSON
 processors, input data mostly needs to be edited into a variant suitable
 for storing into a database, likely also transitioning from a top-level
 object to a top-level list.
-- Unwrap the actual collection which is nested within the top-level `records` element.
-- Flatten the element `nested-list` which contains nested lists.
+
+The following expression unwraps the actual collection which is nested
+within the top-level `records` element.
 ```yaml
 expression: $.records
 type: rson
@@ -107,7 +108,7 @@ Output data
 Transformation definition
 ```{code-block} yaml
 # Tikray collection-level transformation definition.
-# Includes a Moksha/rsonpath transformation rule for unwrapping and flattening.
+# Includes a Moksha/rsonpath transformation rule for unwrapping.
 # https://tikray.readthedocs.io/
 ---
 meta:

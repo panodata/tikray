@@ -16,7 +16,7 @@ class RsonTransformer:
     jqlang-based test cases.
     """
 
-    def __init__(self, expression: str, **kwargs):
+    def __init__(self, expression: str, **kwargs):  # kwargs for API consistency with other transformers
         self.expression = expression
 
     def transform(self, data: t.Any):
