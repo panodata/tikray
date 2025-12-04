@@ -65,7 +65,7 @@ def test_moksha_rson_no_match():
     assert transformation.apply(deepcopy(data)) is None
 
 
-def test_moksha_jq_slice():
+def test_moksha_jq_slice_key():
     """
     A little bit of slicing.
     """
@@ -74,13 +74,49 @@ def test_moksha_jq_slice():
     assert transformation.apply(deepcopy(data)) == "bar"
 
 
-def test_moksha_rson_slice():
+def test_moksha_rson_slice_key():
     """
     A little bit of slicing.
     """
     data = [{"foo": "bar"}, {"baz": "qux"}]
     transformation = MokshaTransformation().rson("$.*.foo")
     assert transformation.apply(deepcopy(data)) == "bar"
+
+
+def test_moksha_jq_slice_index():
+    """
+    A little bit of slicing.
+    """
+    data = [{"foo": "bar"}, {"baz": "qux"}]
+    transformation = MokshaTransformation().jq(".[0]")
+    assert transformation.apply(deepcopy(data)) == {"foo": "bar"}
+
+
+def test_moksha_rson_slice_index():
+    """
+    A little bit of slicing.
+    """
+    data = [{"foo": "bar"}, {"baz": "qux"}]
+    transformation = MokshaTransformation().rson("$[0]")
+    assert transformation.apply(deepcopy(data)) == {"foo": "bar"}
+
+
+def test_moksha_jq_unwrap_records():
+    """
+    A little bit of unwrapping.
+    """
+    data = {"data": [{"foo": "bar"}, {"baz": "qux"}]}
+    transformation = MokshaTransformation().jq(".data")
+    assert transformation.apply(deepcopy(data)) == data["data"]
+
+
+def test_moksha_rson_unwrap_records():
+    """
+    A little bit of unwrapping.
+    """
+    data = {"data": [{"foo": "bar"}, {"baz": "qux"}]}
+    transformation = MokshaTransformation().rson("$.data")
+    assert transformation.apply(deepcopy(data)) == data["data"]
 
 
 def test_moksha_jq_select_pick_keys():
