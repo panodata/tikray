@@ -20,7 +20,7 @@ converter program.
 ## Details
 
 A data model and implementation for a compact transformation engine based on
-[JMESPath], [jq], [JSON Pointer] (RFC 6901), [transon], and [DWIM].
+[JMESPath], [jq], [JSON Pointer] (RFC 6901), [rsonpath], [transon], and [DWIM].
 
 The reference implementation is written in [Python], using [attrs] and [cattrs].
 The design, conventions, and definitions also encourage implementations
@@ -87,4 +87,5 @@ within the header sections of relevant files.
 [JMESPath]: https://jmespath.org/
 [JSON Pointer]: https://datatracker.ietf.org/doc/html/rfc6901
 [Python]: https://en.wikipedia.org/wiki/Python_(programming_language)
+[rsonpath]: https://rsonquery.github.io/rsonpath/
 [transon]: https://transon-org.github.io/

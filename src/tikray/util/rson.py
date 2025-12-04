@@ -30,11 +30,15 @@ class RsonTransformer:
         """
         Invoke the rsonpy module for conducting the transformation, using the `orjson` JSON serializer.
 
-        FIXME: Because rsonpy currently only provides a string-based interface,
-               the code needs to nest a few encoders and decoders.
-               When possible, provide a better interface like the other
-               modules are doing it? The `jqlang` interface can be used
-               as a blueprint.
+        Because rsonpy currently only provides a string-based interface,
+        the code needs to nest a few encoders and decoders.
+
+        > Rsonpath is made to filter document ahead of parsing/loading. Think of it more like a way to
+        > select a small part of the documents before loading it into memory. It will shine in situations
+        > where you have a JSON file too big to hold in memory but you nevertheless want to load parts of it.
+
+        > Rsonpath does not load anything into memory.
+        > It only works on the raw JSON, not on an in-memory data structure.
 
         TODO: Because the transformation returns a generator, the code is currently
               evaluating it, just using `next`, effectively expecting a single item
