@@ -59,8 +59,9 @@ metadata. In this spirit, when connecting pipeline elements of JSON
 processors, input data mostly needs to be edited into a variant suitable
 for storing into a database, likely also transitioning from a top-level
 object to a top-level list.
-- Unwrap the actual collection which is nested within the top-level `records` element.
-- Flatten the element `nested-list` which contains nested lists.
+
+The following expression unwraps the actual collection which is nested
+within the top-level `records` element.
 ```yaml
 expression: $.records
 type: rson
