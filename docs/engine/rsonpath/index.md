@@ -20,7 +20,7 @@ and specifically the [JSONPath reference].
 :::
 
 > Rsonpath is made to filter JSON data ahead of parsing/loading. Think of
-it like a way to select a small part of the documents before
+it like a way to select a small part of the document before
 loading it into memory. It will shine in situations where you have a
 JSON file too big to hold in memory, but you nevertheless want to load
 parts of it.
