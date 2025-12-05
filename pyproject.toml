@@ -103,6 +103,7 @@ dependencies = [
   "orjsonl<2",
   "python-dateutil<2.10",
   "pyyaml<7",
+  "rsonpy<0.2",
   "toolz<2",
   "tqdm<5",
   "transon==0.0.7",

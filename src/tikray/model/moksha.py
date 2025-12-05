@@ -10,7 +10,8 @@ from attrs import define
 
 from tikray.model.base import DictOrList
 from tikray.model.bucket import ConverterBase, MokshaTransformer, TransonTemplate
-from tikray.util.expression import compile_expression
+from tikray.util.expression import ALLOWED_EXPRESSION_TYPES, compile_expression
+from tikray.util.rson import RsonTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -43,10 +44,14 @@ class MokshaRuntimeRule:
             if isinstance(data, map):
                 data = list(data)
             return self.transformer.transform(data)
+        elif isinstance(self.transformer, RsonTransformer):
+            return self.transformer.transform(data)
         elif isinstance(self.transformer, transon.Transformer):
             return self.transformer.transform(data)
         else:
-            raise TypeError(f"Evaluation failed. Type must be either jmes or jq or transon: {self.transformer}")
+            raise TypeError(
+                f"Evaluation failed. Type must be one of [{', '.join(ALLOWED_EXPRESSION_TYPES)}]: {self.transformer}"
+            )
 
 
 @define
@@ -66,6 +71,13 @@ class MokshaTransformation(ConverterBase):
             raise ValueError("jq expression cannot be empty")
 
         self._add_rule(MokshaRule(type="jq", expression=expression))
+        return self
+
+    def rson(self, expression: str) -> "MokshaTransformation":
+        if not expression:
+            raise ValueError("rson expression cannot be empty")
+
+        self._add_rule(MokshaRule(type="rson", expression=expression))
         return self
 
     def transon(self, expression: TransonTemplate) -> "MokshaTransformation":
