@@ -1,5 +1,7 @@
 import sys
 
+from tikray.util.rson import RsonTransformer
+
 if sys.version_info >= (3, 10):
     from importlib.resources import files as resource_files
 else:  # pragma: no cover
@@ -19,12 +21,21 @@ jq_functions_path = resource_files("tikray")
 jq_functions_import = f'include "function" {{"search": "{jq_functions_path}"}};'
 
 
+ALLOWED_EXPRESSION_TYPES = ["jmes", "jq", "rson", "transon"]
+
+
 def compile_expression(type: str, expression: t.Union[str, TransonTemplate], **kwargs) -> MokshaTransformer:  # noqa: A002
+    """
+    Compile any type of expression.
+    """
+    # Dispatch to the corresponding compiler lazily, only select the requested one.
     if type == "jmes":
         return jmespath.compile(expression)
     elif type == "jq":
         return jq.compile(f"{jq_functions_import} {expression}", **kwargs)
+    elif type == "rson":
+        return RsonTransformer(t.cast(str, expression), **kwargs)
     elif type == "transon":
         return transon.Transformer(expression)
     else:
-        raise TypeError(f"Compilation failed. Type must be either jmes or jq or transon: {type}")
+        raise TypeError(f"Compilation failed. Type must be one of [{', '.join(ALLOWED_EXPRESSION_TYPES)}]: {type}")

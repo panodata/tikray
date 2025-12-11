@@ -13,12 +13,13 @@ from jsonpointer import JsonPointer
 from tikray.model.base import Dumpable, Metadata, SchemaDefinition
 from tikray.util.dictx import OrderedDictX
 from tikray.util.locator import swap_node, to_pointer
+from tikray.util.rson import RsonTransformer
 
 logger = logging.getLogger(__name__)
 
 
 TransonTemplate = t.Dict[str, t.Any]
-MokshaTransformer = t.Union[jmespath.parser.ParsedResult, jq._Program, transon.Transformer]
+MokshaTransformer = t.Union[jmespath.parser.ParsedResult, jq._Program, RsonTransformer, transon.Transformer]
 
 
 @define
