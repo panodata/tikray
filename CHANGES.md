@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## 2025/12/11 v0.3.0
 - Added `rsonpath` transformations using `rsonpy`
 
 ## 2025/05/13 v0.2.2
