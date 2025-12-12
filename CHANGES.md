@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 2025/12/12 v0.3.1
+- Change license to MIT
+
 ## 2025/12/11 v0.3.0
 - Added `rsonpath` transformations using `rsonpy`
 
