@@ -34,7 +34,7 @@ keywords = [
   "unserialize",
   "utility",
 ]
-license = "LGPL-3.0-only"
+license = "MIT"
 license-files = [ "LICENSE" ]
 authors = [
   { name = "Andreas Motl", email = "andreas.motl@panodata.org" },

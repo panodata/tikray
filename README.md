@@ -61,11 +61,7 @@ A previous version used the name `zyp`,
 with kudos to [Kris Zyp] for conceiving [JSON Pointer].
 
 ### License
-The project uses the LGPLv3 license for the whole ensemble. However, individual
-portions of the code base are vendored from other Python packages, where
-deviating licenses may apply. Please check for detailed license information
-within the header sections of relevant files.
-
+MIT.
 
 
 [An introduction and overview about Singer]: https://github.com/daq-tools/lorrystream/blob/main/doc/singer/intro.md
