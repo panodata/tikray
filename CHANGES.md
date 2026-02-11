@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 2026/02/11 v0.3.2
+- Updated requirements across the board:
+  pymongo 4.16, jq 1.11, jmespath 1.1.
+
 ## 2025/12/12 v0.3.1
 - Change license to MIT
 
