@@ -84,7 +84,7 @@ def scale(lf: pl.LazyFrame, column_name: str, factor: float) -> pl.LazyFrame:
     """
     Scale a single column.
     """
-    return lf.with_columns(pl.col(column_name).truediv(int(factor)))
+    return lf.with_columns(pl.col(column_name).truediv(float(factor)))
 
 
 @recipe

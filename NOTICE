@@ -1,0 +1,13 @@
+The Tikray package is using the MIT license. However, it may pull in additional
+optional packages that are using different licenses.
+
+For example, the optional package extra `macropipe` pulls in the `polars-st`
+package, which is using LGPL-2.1 licensed code that statically links GEOS main.
+
+Static linking of LGPL code triggers compliance obligations (source code provision,
+relinking capability, license/copyright notices) regardless of optional dependency
+status.
+
+When using this package in your software, conduct a legal/packaging review to
+determine compliance measures needed and add prominent user-facing documentation
+disclosing the LGPL-2.1 dependency and its implications.

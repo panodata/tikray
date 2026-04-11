@@ -35,11 +35,6 @@ The Polars engine is currently a stand-in. It has not been slotted into the
 Tikray data model yet. However, you can already use its Python API like
 outlined below.
 
-```csv
-timestamp,coordinates,data
-1754784000000,"[9.757, 47.389]","{'temperature': 42.42, 'humidity': 84.84}"
-```
-
 ```python
 import polars as pl
 from io import StringIO
@@ -55,8 +50,20 @@ pipe = MacroPipe.from_recipes(
 lf = pl.scan_csv("example.csv", quote_char='"')
 
 # Apply transformation and inspect data.
-df = pipe.process(lf).collect()
+df = pipe.apply(lf).collect()
 print(df)
+```
+
+**Input (`example.csv`):**
+```csv
+timestamp,coordinates,data
+1754784000000,"[9.757, 47.389]","{'temperature': 42.42, 'humidity': 84.84}"
+```
+
+**Output:**
+```csv
+timestamp,coordinates,data
+1754784000000,"POINT( 9.757 47.389 )","{""temperature"": 42.42, ""humidity"": 84.84}"
 ```
 
 ## Details

@@ -1,9 +1,10 @@
 from io import StringIO
 
 import polars as pl
+import pytest
 from polars.testing import assert_frame_equal
 
-from tikray.macropipe.core import MacroPipe
+from tikray.macropipe import MacroPipe
 
 
 def test_cast_scalar_str():
@@ -15,7 +16,7 @@ def test_cast_scalar_str():
     pipe = MacroPipe.from_recipes(
         "cast:float,int,str:str",
     )
-    converted_frame = pipe.process(input_frame.lazy()).collect()
+    converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
         output_frame,
         converted_frame,
@@ -31,7 +32,7 @@ def test_cast_scalar_float():
     pipe = MacroPipe.from_recipes(
         "cast:float,int,str:float",
     )
-    converted_frame = pipe.process(input_frame.lazy()).collect()
+    converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
         output_frame,
         converted_frame,
@@ -50,7 +51,7 @@ timestamp,data,garbage1,garbage2
         "select:timestamp,data",
     )
     df = pl.scan_csv(StringIO(csv))
-    df = pipe.process(df).collect()
+    df = pipe.apply(df).collect()
     assert_frame_equal(
         df,
         pl.DataFrame({"timestamp": [1754784000000], "data": ["foo"]}),
@@ -69,7 +70,7 @@ timestamp,data,garbage1,garbage2
         "drop:garbage1,garbage2",
     )
     df = pl.scan_csv(StringIO(csv))
-    df = pipe.process(df).collect()
+    df = pipe.apply(df).collect()
     assert_frame_equal(
         df,
         pl.DataFrame({"timestamp": [1754784000000], "data": ["foo"]}),
@@ -88,7 +89,7 @@ _id,data
         "rename:_id:__id",
     )
     df = pl.scan_csv(StringIO(csv))
-    df = pipe.process(df).collect()
+    df = pipe.apply(df).collect()
     assert_frame_equal(
         df,
         pl.DataFrame({"__id": [42], "data": ["Hotzenplotz"]}),
@@ -104,7 +105,7 @@ def test_concat():
     pipe = MacroPipe.from_recipes(
         "concat:float,int,str:,:combined:drop=true",
     )
-    converted_frame = pipe.process(input_frame.lazy()).collect()
+    converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
         output_frame,
         converted_frame,
@@ -120,7 +121,7 @@ def test_scale():
     pipe = MacroPipe.from_recipes(
         "scale:value:100",
     )
-    converted_frame = pipe.process(input_frame.lazy()).collect()
+    converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
         output_frame,
         converted_frame,
@@ -136,7 +137,7 @@ def test_iso_to_unixtime():
     pipe = MacroPipe.from_recipes(
         "iso_to_unixtime:value",
     )
-    converted_frame = pipe.process(input_frame.lazy()).collect()
+    converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
         output_frame,
         converted_frame,
@@ -152,7 +153,7 @@ def test_unixtime_to_iso():
     pipe = MacroPipe.from_recipes(
         "unixtime_to_iso:value",
     )
-    converted_frame = pipe.process(input_frame.lazy()).collect()
+    converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
         output_frame,
         converted_frame,
@@ -171,6 +172,7 @@ def test_earth_observations_coords_python():
 
     https://gist.github.com/amotl/949547787e116c8cafabe2959281e7ec
     """
+    pytest.importorskip("polars_st")
     csv = """
 timestamp,coords,data
 1754784000000,"[9.757, 47.389]","{'temperature': 42.42}"
@@ -180,7 +182,7 @@ timestamp,coords,data
         "python_to_json:data",
     )
     df = pl.scan_csv(StringIO(csv), quote_char='"')
-    df = pipe.process(df).collect()
+    df = pipe.apply(df).collect()
     assert_frame_equal(
         df,
         pl.DataFrame(
@@ -193,6 +195,7 @@ def test_combine_coords_cells():
     """
     Validate combining two columns into one.
     """
+    pytest.importorskip("polars_st")
     csv = """
 timestamp,longitude,latitude
 1754784000000,9.757,47.389
@@ -202,7 +205,7 @@ timestamp,longitude,latitude
         "json_array_to_wkt_point:coords",
     )
     df = pl.scan_csv(StringIO(csv))
-    df = pipe.process(df).collect()
+    df = pipe.apply(df).collect()
     assert_frame_equal(
         df,
         pl.DataFrame({"timestamp": [1754784000000], "coords": ["POINT (9.757 47.389)"]}),
@@ -221,7 +224,7 @@ timestamp,data
         "json_fields_to_columns:data:longitude,latitude:drop=true",
     )
     df = pl.scan_csv(StringIO(csv), quote_char="'")
-    df = pipe.process(df).collect()
+    df = pipe.apply(df).collect()
     assert_frame_equal(
         df,
         pl.DataFrame({"timestamp": [1754784000000], "longitude": ["9.757"], "latitude": ["47.389"]}),
@@ -232,6 +235,7 @@ def test_extract_json_coords():
     """
     Validate extracting fields from JSON into WKT POINT.
     """
+    pytest.importorskip("polars_st")
     csv = """
 timestamp,data
 1754784000000,"{""lon"": 9.757, ""lat"": 47.389}"
@@ -240,7 +244,7 @@ timestamp,data
         "json_fields_to_wkt_point:data:lon:lat:coords:drop=true",
     )
     df = pl.scan_csv(StringIO(csv))
-    df = pipe.process(df).collect()
+    df = pipe.apply(df).collect()
     assert_frame_equal(
         df,
         pl.DataFrame({"timestamp": [1754784000000], "coords": ["POINT (9.757 47.389)"]}),

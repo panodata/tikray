@@ -61,7 +61,8 @@ A previous version used the name `zyp`,
 with kudos to [Kris Zyp] for conceiving [JSON Pointer].
 
 ### License
-MIT.
+MIT. However, optional dependencies may pull in packages using different
+licenses. See [LICENSE] and [NOTICE] files about more details.
 
 
 [An introduction and overview about Singer]: https://github.com/daq-tools/lorrystream/blob/main/doc/singer/intro.md
@@ -70,7 +71,9 @@ MIT.
 [Kris Zyp]: https://github.com/kriszyp
 [tikray]: https://pypi.org/project/tikray/
 [Quechua language]: https://en.wikipedia.org/wiki/Quechua_language
+[LICENSE]: https://github.com/panodata/tikray/blob/main/LICENSE
 [managed on GitHub]: https://github.com/panodata/tikray
+[NOTICE]: https://github.com/panodata/tikray/blob/main/NOTICE
 [PyPI]: https://pypi.org/
 [research and development notes]: https://tikray.readthedocs.io/research.html
 

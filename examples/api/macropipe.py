@@ -9,7 +9,6 @@ The procedure applies two transformations before the data is ready.
 - https://gist.github.com/amotl/949547787e116c8cafabe2959281e7ec
 """
 
-import csv
 from io import StringIO
 
 import polars as pl
@@ -28,7 +27,7 @@ def main():
         "python_to_json:data",
     )
     input_frame = pl.scan_csv(StringIO(CSV_DATA), quote_char='"')
-    output_frame = pipe.process(input_frame)
+    output_frame = pipe.apply(input_frame)
 
     print("Input: ", input_frame.collect())
     print("Output:", output_frame.collect())
@@ -37,7 +36,7 @@ def main():
     print(CSV_DATA)
     print()
     print("Output CSV:")
-    print(output_frame.collect().to_pandas().to_csv(index=False, quoting=csv.QUOTE_STRINGS))
+    print(output_frame.collect().write_csv(quote_style="non_numeric"))
 
 
 if __name__ == "__main__":

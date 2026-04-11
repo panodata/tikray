@@ -30,14 +30,14 @@ class MacroPipe:
     """A miniature transformation engine based on Polars."""
 
     expressions: t.List[str]
-    registry: Registry = Registry()
+    registry: t.ClassVar[Registry] = dataclasses.field(default=Registry())
 
     @classmethod
     def from_recipes(cls, *recipes: str) -> "MacroPipe":
         """Create MacroPipe from list of recipes (textual macro commands)."""
         return cls(expressions=list(recipes))
 
-    def process(self, lf: pl.LazyFrame) -> pl.LazyFrame:
+    def apply(self, lf: pl.LazyFrame) -> pl.LazyFrame:
         """Convert recipes to Polars expressions and apply as transformation elements."""
         for expression in self.expressions:
             function_name, *args = expression.split(":")
