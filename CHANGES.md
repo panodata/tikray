@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- MacroPipe: Added transformation unit based on Polars expressions
 
 ## 2026/02/11 v0.3.2
 - Updated requirements across the board:

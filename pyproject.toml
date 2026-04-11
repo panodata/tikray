@@ -107,6 +107,10 @@ dependencies = [
   "toolz<2",
   "tqdm<5",
   "transon==0.0.7",
+  "yarl",
+]
+optional-dependencies.all = [
+  "tikray[macropipe]",
 ]
 optional-dependencies.develop = [
   "mypy<1.20",
@@ -123,6 +127,10 @@ optional-dependencies.docs = [
   "sphinx-design-elements<1",
   "sphinxcontrib-mermaid<2",
   "sphinxext-opengraph<1",
+]
+optional-dependencies.macropipe = [
+  "polars",
+  "polars-st",
 ]
 optional-dependencies.mongodb = [
   "pymongo<4.17",
