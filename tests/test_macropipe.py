@@ -7,21 +7,74 @@ from polars.testing import assert_frame_equal
 from tikray.macropipe import MacroPipe, recipe
 
 
-def test_user_registered_recipe():
-    """
-    Validate a user-registered transformation recipe.
-    """
-
-    @recipe
-    def hello(lf: pl.LazyFrame, column_name: str) -> pl.LazyFrame:
-        return lf.with_columns(pl.concat_str(pl.lit("Hello"), pl.col(column_name), separator=" ").alias(column_name))
-
-    input_frame = pl.DataFrame({"value": [42.42]}).lazy()
-    output_frame = pl.DataFrame({"value": ["Hello 42.42"]}).lazy()
+def test_head():
+    """Validate the `head` function."""
+    input_frame = pl.DataFrame({"value": [42.42, 84.84]}).lazy()
+    output_frame = pl.DataFrame({"value": [42.42]}).lazy()
     pipe = MacroPipe.from_recipes(
-        "hello:value",
+        "head:1",
     )
-    converted_frame = pipe.apply(input_frame)
+    converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
+    )
+
+
+def test_tail():
+    """Validate the `tail` function."""
+    input_frame = pl.DataFrame({"value": [42.42, 84.84]}).lazy()
+    output_frame = pl.DataFrame({"value": [84.84]}).lazy()
+    pipe = MacroPipe.from_recipes(
+        "tail:1",
+    )
+    converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
+    )
+
+
+def test_first():
+    """Validate the `first` function."""
+    input_frame = pl.DataFrame({"value": [42.42, 84.84]}).lazy()
+    output_frame = pl.DataFrame({"value": [42.42]}).lazy()
+    pipe = MacroPipe.from_recipes(
+        "first",
+    )
+    converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
+    )
+
+
+def test_last():
+    """Validate the `last` function."""
+    input_frame = pl.DataFrame({"value": [42.42, 84.84]}).lazy()
+    output_frame = pl.DataFrame({"value": [84.84]}).lazy()
+    pipe = MacroPipe.from_recipes(
+        "last",
+    )
+    converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
+    )
+
+
+def test_format():
+    """
+    Validate the `format` function.
+
+    https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.format.html
+    """
+    input_frame = pl.DataFrame({"a": ["a", "b", "c"], "b": [1, 2, 3]}).lazy()
+    output_frame = pl.DataFrame({"value": ["foo_a_bar_1", "foo_b_bar_2", "foo_c_bar_3"]}).lazy()
+    pipe = MacroPipe.from_recipes(
+        "format:foo_{}_bar_{}:a,b:value:drop=true",
+    )
+    converted_frame = input_frame.mp.apply(pipe)
     assert_frame_equal(
         converted_frame,
         output_frame,
@@ -52,6 +105,27 @@ def test_apply_extension():
     )
     # Invoke `apply` on the `mp` namespace of the `LazyFrame` instance.
     converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
+    )
+
+
+def test_user_registered_recipe():
+    """
+    Validate a user-registered transformation recipe.
+    """
+
+    @recipe
+    def hello(lf: pl.LazyFrame, column_name: str) -> pl.LazyFrame:
+        return lf.with_columns(pl.concat_str(pl.lit("Hello"), pl.col(column_name), separator=" ").alias(column_name))
+
+    input_frame = pl.DataFrame({"value": [42.42]}).lazy()
+    output_frame = pl.DataFrame({"value": ["Hello 42.42"]}).lazy()
+    pipe = MacroPipe.from_recipes(
+        "hello:value",
+    )
+    converted_frame = pipe.apply(input_frame)
     assert_frame_equal(
         converted_frame,
         output_frame,

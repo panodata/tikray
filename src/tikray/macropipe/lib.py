@@ -20,6 +20,42 @@ class MacroPipeBuiltins:
         """Convert transformation recipes to Polars expressions and apply to structured pipeline."""
         return pipe.apply(self._lf)
 
+    def head(self, n: str) -> pl.LazyFrame:
+        """
+        Get the first `n` rows.
+
+        TODO: Q: Can such primitives that barely need any argument processing be mapped directly?
+              A: Well, because of the macro nature, at least all types must be casted appropriately
+                 from `str`. This is an excellent example where only a single argument needs to be
+                 processed. Maybe we can invent some automatic mapping, so we don't need to enumerate
+                 and map Polars' frame methods manually.
+        """
+        return self._lf.head(int(n))
+
+    def tail(self, n: str) -> pl.LazyFrame:
+        """
+        Get the last `n` rows.
+
+        TODO: Improve with automatic frame method mapping, see `head`.
+        """
+        return self._lf.tail(int(n))
+
+    def first(self) -> pl.LazyFrame:
+        """
+        Get the first value.
+
+        TODO: Improve with automatic frame method mapping, see `head`.
+        """
+        return self._lf.first()
+
+    def last(self) -> pl.LazyFrame:
+        """
+        Get the last value.
+
+        TODO: Improve with automatic frame method mapping, see `head`.
+        """
+        return self._lf.last()
+
     def cast(self, column_names: t.Union[str, t.List[str]], dtype: str) -> pl.LazyFrame:
         """
         Cast multiple columns by type name, separated by commas.
@@ -63,6 +99,24 @@ class MacroPipeBuiltins:
         """
         column_names = decode_list(column_names)
         lf = self._lf.with_columns(pl.concat_str(column_names, separator=separator).alias(target_column))
+        if options and "drop=true" in options:
+            lf = lf.drop(*column_names)
+        return lf
+
+    def format(
+        self,
+        f_string: str,
+        column_names: t.Union[str, t.List[str]],
+        target_column: str,
+        options: t.Optional[str] = None,
+    ) -> pl.LazyFrame:
+        """
+        Format expressions as a string.
+
+        "format:foo_{}_bar_{}:a,b:value:drop=true"
+        """
+        column_names = decode_list(column_names)
+        lf = self._lf.with_columns(pl.format(f_string, *column_names).alias(target_column))
         if options and "drop=true" in options:
             lf = lf.drop(*column_names)
         return lf

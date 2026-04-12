@@ -90,7 +90,6 @@ in this spirit the subsystem is trading memory for speed.
 
 ## Backlog
 
-- Primitives (head, tail, first, last, format)
 - Filtering based on SQL WHERE clauses
   https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.sql_expr.html
 - Manipulation of nested data (slicing, reformatting) (JSON Path?)
