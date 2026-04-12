@@ -24,6 +24,10 @@ class MacroPipeBuiltins:
         """
         Get the first `n` rows.
 
+        Input:  All records.
+        Recipe: "head:1"
+        Output: Filtered records.
+
         TODO: Q: Can such primitives that barely need any argument processing be mapped directly?
               A: Well, because of the macro nature, at least all types must be casted appropriately
                  from `str`. This is an excellent example where only a single argument needs to be
@@ -36,6 +40,10 @@ class MacroPipeBuiltins:
         """
         Get the last `n` rows.
 
+        Input:  All records.
+        Recipe: "tail:1"
+        Output: Filtered records.
+
         TODO: Improve with automatic frame method mapping, see `head`.
         """
         return self._lf.tail(int(n))
@@ -43,6 +51,10 @@ class MacroPipeBuiltins:
     def first(self) -> pl.LazyFrame:
         """
         Get the first value.
+
+        Input:  All records.
+        Recipe: "first"
+        Output: Filtered records.
 
         TODO: Improve with automatic frame method mapping, see `head`.
         """
@@ -52,13 +64,21 @@ class MacroPipeBuiltins:
         """
         Get the last value.
 
+        Input:  All records.
+        Recipe: "last"
+        Output: Filtered records.
+
         TODO: Improve with automatic frame method mapping, see `head`.
         """
         return self._lf.last()
 
     def cast(self, column_names: t.Union[str, t.List[str]], dtype: str) -> pl.LazyFrame:
         """
-        Cast multiple columns by type name, separated by commas.
+        Cast multiple columns by type name.
+
+        Input:  {"float": 42.42, "int": 42, "str": "42"}
+        Recipe: "cast:float,int,str:float"
+        Output: {"float": 42.42, "int": 42.0, str: 42.0}
         """
         lf = self._lf
         column_names = decode_list(column_names)
@@ -69,14 +89,22 @@ class MacroPipeBuiltins:
 
     def select(self, column_names: t.Union[str, t.List[str]]) -> pl.LazyFrame:
         """
-        Select multiple columns by name, separated by commas.
+        Select multiple columns by name.
+
+        Input:  {"ts": 1754784000000, "data": "Hotzenplotz", "foo": "42"}
+        Recipe: "select:ts,data"
+        Output: {"ts": 1754784000000, "data": "Hotzenplotz"}
         """
         column_names = decode_list(column_names)
         return self._lf.select(*column_names)
 
     def drop(self, column_names: t.Union[str, t.List[str]]) -> pl.LazyFrame:
         """
-        Drop multiple columns by name, separated by commas.
+        Drop multiple columns by name.
+
+        Input:  {"ts": 1754784000000, "data": "Hotzenplotz", "foo": "42"}
+        Recipe: "drop:foo"
+        Output: {"ts": 1754784000000, "data": "Hotzenplotz"}
         """
         column_names = decode_list(column_names)
         return self._lf.drop(*column_names)
@@ -84,6 +112,10 @@ class MacroPipeBuiltins:
     def rename(self, source_column: str, target_column: str) -> pl.LazyFrame:
         """
         Rename a single column.
+
+        Input:  {"_id": "01kp0w38"}
+        Recipe: "rename:_id:__id"
+        Output: {"__id": "01kp0w38"}
         """
         return self._lf.rename({source_column: target_column})
 
@@ -95,7 +127,11 @@ class MacroPipeBuiltins:
         options: t.Optional[str] = None,
     ) -> pl.LazyFrame:
         """
-        Combine multiple columns by joining them, separated by commas.
+        Combine multiple columns by joining them. Optionally drop the original columns.
+
+        Input:  {"firstname": "Räuber", "lastname": "Hotzenplotz"}
+        Recipe: "concat:firstname,lastname: :combined:drop=true"
+        Output: {"name": "Räuber Hotzenplotz"}
         """
         column_names = decode_list(column_names)
         lf = self._lf.with_columns(pl.concat_str(column_names, separator=separator).alias(target_column))
@@ -111,9 +147,11 @@ class MacroPipeBuiltins:
         options: t.Optional[str] = None,
     ) -> pl.LazyFrame:
         """
-        Format expressions as a string.
+        Derive a new column by applying a format expressions to existing columns. Optionally drop the original columns.
 
-        "format:foo_{}_bar_{}:a,b:value:drop=true"
+        Input:  {"a": ["a", "b", "c"], "b": [1, 2, 3]}
+        Recipe: "format:foo_{}_bar_{}:a,b:value:drop=true"
+        Output: {"value": ["foo_a_bar_1", "foo_b_bar_2", "foo_c_bar_3"]}
         """
         column_names = decode_list(column_names)
         lf = self._lf.with_columns(pl.format(f_string, *column_names).alias(target_column))
@@ -123,13 +161,21 @@ class MacroPipeBuiltins:
 
     def scale(self, column_name: str, factor: float) -> pl.LazyFrame:
         """
-        Scale a single column.
+        Scale value in a single column by multiplying by a factor.
+
+        Input:  {"value": 4242}
+        Recipe: "scale:value:0.01"
+        Output: {"value": 42.42}
         """
-        return self._lf.with_columns(pl.col(column_name).truediv(float(factor)))
+        return self._lf.with_columns(pl.col(column_name).mul(float(factor)))
 
     def iso_to_unixtime(self, column_name: str) -> pl.LazyFrame:
         """
         Convert ISO 8601 / RFC 3339 date & time format to epoch timestamp (Unix time).
+
+        Input:  {"value": "2026-03-03T12:12:12"}
+        Recipe: "iso_to_unixtime:value"
+        Output: {"value": 1772539932}
         """
         return self._lf.with_columns(pl.col(column_name).dt.epoch(time_unit="s"))
 
@@ -137,7 +183,9 @@ class MacroPipeBuiltins:
         """
         Convert epoch timestamp (Unix time) to ISO 8601 / RFC 3339 date & time format.
 
-        Example: 2026-03-03T12:12:12.000000
+        Input:  {"value": 1772539932}
+        Recipe: "unixtime_to_iso:value"
+        Output: {"value": "2026-03-03T12:12:12.000000"}
         """
         return self._lf.with_columns(pl.from_epoch(pl.col(column_name)).dt.to_string(format="iso:strict"))
 
@@ -145,8 +193,9 @@ class MacroPipeBuiltins:
         """
         Convert coordinates list `[long, lat]` in JSON format to WKT `POINT (long lat)` format.
 
-        Input:  "[9.757, 47.389]"
-        Output: "POINT ( 9.757 47.389 )"
+        Input:  {"coordinates": "[9.757, 47.389]"}
+        Recipe: "json_array_to_wkt_point:coordinates"
+        Output: {"coordinates": "POINT ( 9.757 47.389 )"}
         """
         import polars_st as st
 
@@ -156,8 +205,9 @@ class MacroPipeBuiltins:
         """
         Convert Python-encoded dictionary into pure JSON.
 
-        Input:  "{'temperature': 42.42}"
-        Output: '{"temperature": 42.42}'
+        Input:  {"data": "{'temperature': 42.42}"}
+        Recipe: "python_to_json:data"
+        Output: {"data": '{"temperature": 42.42}'}
         """
         return self._lf.with_columns(
             pl.col(col_name).map_elements(lambda x: orjson.dumps(ast.literal_eval(x)).decode(), return_dtype=pl.String)
@@ -167,12 +217,11 @@ class MacroPipeBuiltins:
         self, source_columns: t.Union[str, t.List[str]], target_column: str, options: t.Optional[str] = None
     ) -> pl.LazyFrame:
         """
-        Combine individual columns into JSON-encoded array.
+        Combine individual columns into JSON-encoded array. Optionally drop the original columns.
 
-        Input:  longitude,latitude
-                9.757,47.389
-        Output: coordinates
-                "[9.757 47.389]"
+        Input:  {"longitude": 9.757, "latitude": 47.389}"}
+        Recipe: "columns_to_json_array:longitude,latitude:coordinates:drop=true"
+        Output: {"coordinates": "[9.757 47.389]"}
         """
         source_columns = decode_list(source_columns)
         lf = self._lf.with_columns(
@@ -186,11 +235,11 @@ class MacroPipeBuiltins:
         self, source_column: str, extract_columns: t.Union[str, t.List[str]], options: t.Optional[str] = None
     ) -> pl.LazyFrame:
         """
-        Extract JSON fields into individual columns.
+        Extract JSON fields from single column into individual columns. Optionally drop the original column.
 
-        Input:  '{"longitude": 9.757, "latitude": 47.389}'
-        Output: longitude,latitude
-                9.757,47.389
+        Input:  {"data": '{"longitude": 9.757, "latitude": 47.389, "more": "anything"}'}
+        Recipe: "json_fields_to_columns:data:longitude,latitude:drop=true"
+        Output: {"longitude": 9.757, "latitude": 47.389}
         """
         lf = self._lf
         extract_columns = decode_list(extract_columns)
@@ -214,11 +263,11 @@ class MacroPipeBuiltins:
     ) -> pl.LazyFrame:
         """
         Extract longitude and latitude fields from JSON and encode them into WKT POINT format.
+        Optionally drop the original columns.
 
-        Input:  '{"longitude": 9.757, "latitude": 47.389}'
-                9.757,47.389
-        Output: coords
-                "POINT ( 9.757 47.389 )"
+        Input:  {"data": '{"longitude": 9.757, "latitude": 47.389}'}
+        Recipe: "json_fields_to_wkt_point:data:longitude:latitude:coordinates:drop=true"
+        Output: {"coordinates": "POINT ( 9.757 47.389 )"}
         """
         import polars_st as st
 

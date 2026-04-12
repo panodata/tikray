@@ -195,7 +195,7 @@ _id,data
     assert_frame_equal(converted_frame, output_frame)
 
 
-def test_concat():
+def test_concat_comma():
     """
     Validate combining columns.
     """
@@ -208,6 +208,19 @@ def test_concat():
     assert_frame_equal(converted_frame, output_frame)
 
 
+def test_concat_space():
+    """
+    Validate combining columns, where the separator is a space.
+    """
+    input_frame = pl.LazyFrame({"firstname": ["Räuber"], "lastname": ["Hotzenplotz"]})
+    output_frame = pl.LazyFrame({"name": ["Räuber Hotzenplotz"]})
+    pipe = MacroPipe.from_recipes(
+        "concat:firstname,lastname: :name:drop=true",
+    )
+    converted_frame = pipe.apply(input_frame)
+    assert_frame_equal(converted_frame, output_frame)
+
+
 def test_scale():
     """
     Validate scaling values.
@@ -215,7 +228,7 @@ def test_scale():
     input_frame = pl.LazyFrame({"value": [4242]})
     output_frame = pl.LazyFrame({"value": [42.42]})
     pipe = MacroPipe.from_recipes(
-        "scale:value:100",
+        "scale:value:0.01",
     )
     converted_frame = pipe.apply(input_frame)
     assert_frame_equal(converted_frame, output_frame)
