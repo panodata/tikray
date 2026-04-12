@@ -82,8 +82,8 @@ class MacroPipeBuiltins:
         """
         lf = self._lf
         column_names = decode_list(column_names)
+        dtype_real = pl.DataType.from_python(gettype(dtype))
         for column_name in column_names:
-            dtype_real = pl.DataType.from_python(gettype(dtype))
             lf = lf.with_columns(pl.col(column_name).cast(dtype=dtype_real))
         return lf
 
@@ -191,7 +191,7 @@ class MacroPipeBuiltins:
         Recipe: "iso_to_unixtime:value"
         Output: {"value": 1772539932}
         """
-        return self._lf.with_columns(pl.col(column_name).dt.epoch(time_unit="s"))
+        return self._lf.with_columns(pl.col(column_name).str.to_datetime().dt.epoch(time_unit="s"))
 
     def unixtime_to_iso(self, column_name: str) -> pl.LazyFrame:
         """

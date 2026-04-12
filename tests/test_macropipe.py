@@ -1,3 +1,4 @@
+import re
 from io import StringIO
 
 import polars as pl
@@ -5,6 +6,49 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from tikray.macropipe import MacroPipe, recipe
+from tikray.macropipe.util import gettype
+
+
+def test_util_gettype():
+    """Validate the `gettype` utility function."""
+    assert gettype("str") is str
+    assert gettype("float") is float
+    with pytest.raises(ValueError) as excinfo:
+        gettype("Hotzenplotz")
+    assert excinfo.match("Unknown dtype name: Hotzenplotz")
+
+
+def test_core_decode_expression_success():
+    """Validate the `decode_expression` core method."""
+    assert MacroPipe.decode_expression("foo") == ("foo", [])
+    assert MacroPipe.decode_expression("foo:bar") == ("foo", ["bar"])
+
+
+def test_core_decode_expression_errors():
+    """
+    Validate error cases of the `decode_expression` core method.
+
+    Avoid uncaught unpacking errors when expression is empty or delimiter-only.
+    """
+
+    # Empty expression.
+    with pytest.raises(ValueError) as excinfo:
+        MacroPipe.decode_expression(None)
+    assert excinfo.match("Invalid MacroPipe expression: None")
+
+    with pytest.raises(ValueError) as excinfo:
+        MacroPipe.decode_expression("")
+    assert excinfo.match("Invalid MacroPipe expression: ")
+
+    # Delimiter-only expression.
+    with pytest.raises(ValueError) as excinfo:
+        MacroPipe.decode_expression(":::")
+    assert excinfo.match("Invalid MacroPipe expression: ':::'")
+
+    # Dangling trailing escapes.
+    with pytest.raises(ValueError) as excinfo:
+        MacroPipe.decode_expression("concat:a:\\")
+    assert excinfo.match(re.escape(r"Invalid MacroPipe expression: 'concat:a:\\'"))
 
 
 def test_head():
