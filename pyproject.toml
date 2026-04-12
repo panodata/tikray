@@ -23,6 +23,8 @@ keywords = [
   "map data",
   "marshal",
   "nested data",
+  "polars",
+  "polars-extension",
   "serialize",
   "sql",
   "tool",

@@ -19,9 +19,16 @@ performance advantages.
 
 ## About
 
-Tikray includes the `tikray.macropipe` package: `MacroPipe` is a miniature
-transformation engine based on Polars, accompanied by the `recipe` decorator
-to register composite transformation functions.
+Tikray/MacroPipe follows the structured pipeline approach provided by Polars'
+`pipe` operator.
+
+It provides a miniature transformation engine based on Polars,
+that ships with a few built-in recipes and allows you to register composite
+transformation functions yourself, based on Polars' powerful `Expr` primitive.
+
+Tikray includes the `tikray.macropipe` package that exports the `MacroPipe`
+and `recipe` symbols for Python consumption. Additionally, it registers its
+methods on the `mp` LazyFrame namespace for Polars consumption.
 
 ## Install
 
@@ -80,6 +87,16 @@ in this spirit the subsystem is trading memory for speed.
 - https://pypi.org/project/polars-st/ (50 MB)
 - https://pypi.org/project/pyarrow/ (50 MB)
 - https://pypi.org/project/pyogrio/ (30 MB)
+
+## Backlog
+
+- Primitives (head, tail, first, last, format)
+- Filtering based on SQL WHERE clauses
+  https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.sql_expr.html
+- Manipulation of nested data (slicing, reformatting) (JSON Path?)
+- fill_null, drop_nans, drop_nulls, fill_nan
+- Use polars-url, polars-ts, turtle-island
+- https://github.com/ddotta/awesome-polars
 
 
 [expression]: https://docs.pola.rs/user-guide/concepts/expressions-and-contexts/

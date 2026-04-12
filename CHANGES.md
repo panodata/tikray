@@ -1,7 +1,8 @@
 # Changelog
 
 ## Unreleased
-- MacroPipe: Added transformation unit based on Polars expressions
+- MacroPipe: Added transformation unit based on Polars expressions,
+  available as Polars LazyFrame extension `lf.mp`
 
 ## 2026/02/11 v0.3.2
 - Updated requirements across the board:

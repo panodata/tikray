@@ -4,12 +4,63 @@ import polars as pl
 import pytest
 from polars.testing import assert_frame_equal
 
-from tikray.macropipe import MacroPipe
+from tikray.macropipe import MacroPipe, recipe
 
 
-def test_cast_scalar_str():
+def test_user_registered_recipe():
     """
-    Validate casting columns to string type.
+    Validate a user-registered transformation recipe.
+    """
+
+    @recipe
+    def hello(lf: pl.LazyFrame, column_name: str) -> pl.LazyFrame:
+        return lf.with_columns(pl.concat_str(pl.lit("Hello"), pl.col(column_name), separator=" ").alias(column_name))
+
+    input_frame = pl.DataFrame({"value": [42.42]}).lazy()
+    output_frame = pl.DataFrame({"value": ["Hello 42.42"]}).lazy()
+    pipe = MacroPipe.from_recipes(
+        "hello:value",
+    )
+    converted_frame = pipe.apply(input_frame)
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
+    )
+
+
+def test_apply_macropipe():
+    """Validate MacroPipe's `apply` function."""
+    input_frame = pl.DataFrame({"value": [42.42]}).lazy()
+    output_frame = pl.DataFrame({"value": ["42.42"]}).lazy()
+    pipe = MacroPipe.from_recipes(
+        "cast:value:str",
+    )
+    # Invoke `apply` on the `MacroPipe` instance.
+    converted_frame = pipe.apply(input_frame)
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
+    )
+
+
+def test_apply_extension():
+    """Validate the extension's `apply` function."""
+    input_frame = pl.DataFrame({"value": [42.42]}).lazy()
+    output_frame = pl.DataFrame({"value": ["42.42"]}).lazy()
+    pipe = MacroPipe.from_recipes(
+        "cast:value:str",
+    )
+    # Invoke `apply` on the `mp` namespace of the `LazyFrame` instance.
+    converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
+    )
+
+
+def test_cast_scalar_str_macro():
+    """
+    Validate casting columns to string type, macro style.
     """
     input_frame = pl.DataFrame({"float": [42.42], "int": [42], "str": ["42"]})
     output_frame = pl.DataFrame({"float": ["42.42"], "int": ["42"], "str": ["42"]})
@@ -18,8 +69,21 @@ def test_cast_scalar_str():
     )
     converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
-        output_frame,
         converted_frame,
+        output_frame,
+    )
+
+
+def test_cast_scalar_str_extension():
+    """
+    Validate casting columns to string type, extension style.
+    """
+    input_frame = pl.LazyFrame({"float": [42.42], "int": [42], "str": ["42"]})
+    output_frame = pl.LazyFrame({"float": ["42.42"], "int": ["42"], "str": ["42"]})
+    converted_frame = input_frame.mp.cast("float,int,str", "str")
+    assert_frame_equal(
+        converted_frame,
+        output_frame,
     )
 
 
@@ -34,8 +98,8 @@ def test_cast_scalar_float():
     )
     converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
-        output_frame,
         converted_frame,
+        output_frame,
     )
 
 
@@ -107,8 +171,8 @@ def test_concat():
     )
     converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
-        output_frame,
         converted_frame,
+        output_frame,
     )
 
 
@@ -123,8 +187,8 @@ def test_scale():
     )
     converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
-        output_frame,
         converted_frame,
+        output_frame,
     )
 
 
@@ -139,8 +203,8 @@ def test_iso_to_unixtime():
     )
     converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
-        output_frame,
         converted_frame,
+        output_frame,
     )
 
 
@@ -155,8 +219,8 @@ def test_unixtime_to_iso():
     )
     converted_frame = pipe.apply(input_frame.lazy()).collect()
     assert_frame_equal(
-        output_frame,
         converted_frame,
+        output_frame,
     )
 
 
