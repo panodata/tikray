@@ -11,6 +11,7 @@ https://discuss.python.org/t/functools-pipe-function-composition-utility/69744
 """
 
 import dataclasses
+import re
 import typing as t
 
 import polars as pl
@@ -32,7 +33,12 @@ class MacroPipe:
         return cls(expressions=list(recipes))
 
     def resolve_function(self, name: str, lf: pl.LazyFrame) -> t.Callable:
-        """Resolve macro function either from extension or from user-registered function."""
+        """
+        Resolve macro function either from extension or from user-registered function.
+
+        TODO: When using the second (else) code path, this function could make
+              the `lf` argument optional after reshuffling logic.
+        """
         function = getattr(lf.mp, name, None)  # type: ignore[attr-defined]
         if function is not None:
             # When invoking the extension function in the `lf.mp` namespace,
@@ -43,20 +49,35 @@ class MacroPipe:
             # it can be invoked without further ado.
             return self.registry.get(name)
 
+    @staticmethod
+    def decode_expression(expression: str) -> t.Tuple[str, t.List[str]]:
+        """
+        Tokenize the expression and convert it to a tuple describing the macro invocation (function, arg1, arg2, ...).
+
+        TODO: The expression language is currently pretty poor.
+              It can certainly be improved in future iterations.
+              Any suggestions are very much welcome.
+        """
+
+        # Tokenize by colons but read escaped colons literally.
+        tokens = re.findall(r"(?:[^:\\]|\\.)+", expression)
+        function_name, *args = tokens
+        args = [a.replace("\\:", ":") for a in args]
+
+        return function_name, args
+
     def apply(self, lf: pl.LazyFrame) -> pl.LazyFrame:
         """Convert transformation recipes to Polars expressions and apply to structured pipeline."""
 
-        # Convert all expressions.
+        # Convert all macro expressions to Polars LazyFrame transformations.
         for expression in self.expressions:
-            # TODO: The expression language is currently pretty poor.
-            #       It can certainly be improved in future iterations.
-            #       Any suggestions are very much welcome.
-            function_name, *args = expression.split(":")
+            # Decode macro expression into macro invocation descriptor.
+            function_name, function_args = self.decode_expression(expression)
 
-            # Resolve UDF from builtins or registered functions.
+            # Resolve UDF from MacroPipe built-ins or user-registered functions.
             function = self.resolve_function(function_name, lf)
 
-            # Add to pipeline.
-            lf = lf.pipe(function, *args)
+            # Add transformation to pipeline.
+            lf = lf.pipe(function, *function_args)
 
         return lf

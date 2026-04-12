@@ -51,7 +51,7 @@ def test_last():
     assert_frame_equal(converted_frame, output_frame)
 
 
-def test_format():
+def test_format_standard():
     """
     Validate the `format` function.
 
@@ -61,6 +61,22 @@ def test_format():
     output_frame = pl.LazyFrame({"value": ["foo_a_bar_1", "foo_b_bar_2", "foo_c_bar_3"]})
     pipe = MacroPipe.from_recipes(
         "format:foo_{}_bar_{}:a,b:value:drop=true",
+    )
+    converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(converted_frame, output_frame)
+
+
+def test_format_including_colon():
+    """
+    Validate the `format` function, including escaped colons.
+
+    This is special, because the current miniature expression language uses colons as
+    separators between function name and arguments.
+    """
+    input_frame = pl.LazyFrame({"a": ["a"], "b": [1]})
+    output_frame = pl.LazyFrame({"value": ["foo: a, bar: 1"]})
+    pipe = MacroPipe.from_recipes(
+        r"format:foo\: {}, bar\: {}:a,b:value:drop=true",
     )
     converted_frame = input_frame.mp.apply(pipe)
     assert_frame_equal(converted_frame, output_frame)
