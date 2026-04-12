@@ -10,7 +10,7 @@ class Registry:
     def register(cls, fn: t.Callable) -> None:
         cls.r[fn.__name__] = fn
 
-    def get(self, name):
+    def get(self, name: str) -> t.Callable:
         if name not in self.r:
             raise NotImplementedError(f"MacroPipe function not implemented: {name}")
         return self.r[name]

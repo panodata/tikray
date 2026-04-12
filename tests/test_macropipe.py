@@ -6,6 +6,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from tikray.macropipe import MacroPipe, recipe
+from tikray.macropipe.lib import MacroPipeBuiltins
 from tikray.macropipe.util import decode_list, gettype
 
 
@@ -55,6 +56,21 @@ def test_core_decode_expression_errors():
     with pytest.raises(ValueError) as excinfo:
         MacroPipe.decode_expression("concat:a:\\")
     assert excinfo.match(re.escape(r"Invalid MacroPipe expression: 'concat:a:\\'"))
+
+
+def test_lib_drop_if_requested():
+    """Validate the `_drop_if_requested` lib helper function."""
+
+    # Without drop.
+    input_frame = pl.LazyFrame({"value": [42.42], "b": ["unknown"]})
+    converted_frame = MacroPipeBuiltins._drop_if_requested(input_frame, "", ["b", "c"])
+    assert_frame_equal(converted_frame, input_frame)
+
+    # With drop.
+    input_frame = pl.LazyFrame({"value": [42.42], "b": ["unknown"], "c": ["unknown"]})
+    output_frame = pl.LazyFrame({"value": [42.42]})
+    converted_frame = MacroPipeBuiltins._drop_if_requested(input_frame, "drop=true", ["b", "c"])
+    assert_frame_equal(converted_frame, output_frame)
 
 
 def test_head():

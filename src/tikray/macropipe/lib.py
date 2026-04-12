@@ -16,6 +16,13 @@ class MacroPipeBuiltins:
     def __init__(self, lf: pl.LazyFrame) -> None:
         self._lf = lf
 
+    @staticmethod
+    def _drop_if_requested(lf: pl.LazyFrame, options: t.Optional[str], columns: t.List[str]) -> pl.LazyFrame:
+        """Drop columns when `drop=true` is present in the options string."""
+        if options and "drop=true" in options:
+            return lf.drop(*columns)
+        return lf
+
     def apply(self, pipe) -> pl.LazyFrame:
         """Convert transformation recipes to Polars expressions and apply to structured pipeline."""
         return pipe.apply(self._lf)
@@ -80,12 +87,9 @@ class MacroPipeBuiltins:
         Recipe: "cast:float,int,str:float"
         Output: {"float": 42.42, "int": 42.0, str: 42.0}
         """
-        lf = self._lf
         column_names = decode_list(column_names)
         dtype_real = pl.DataType.from_python(gettype(dtype))
-        for column_name in column_names:
-            lf = lf.with_columns(pl.col(column_name).cast(dtype=dtype_real))
-        return lf
+        return self._lf.with_columns([pl.col(col).cast(dtype=dtype_real) for col in column_names])
 
     def select(self, column_names: t.Union[str, t.List[str]]) -> pl.LazyFrame:
         """
@@ -135,9 +139,7 @@ class MacroPipeBuiltins:
         """
         column_names = decode_list(column_names)
         lf = self._lf.with_columns(pl.concat_str(column_names, separator=separator).alias(target_column))
-        if options and "drop=true" in options:
-            lf = lf.drop(*column_names)
-        return lf
+        return self._drop_if_requested(lf, options, column_names)
 
     def format(
         self,
@@ -155,9 +157,7 @@ class MacroPipeBuiltins:
         """
         column_names = decode_list(column_names)
         lf = self._lf.with_columns(pl.format(f_string, *column_names).alias(target_column))
-        if options and "drop=true" in options:
-            lf = lf.drop(*column_names)
-        return lf
+        return self._drop_if_requested(lf, options, column_names)
 
     def filter(self, sql: str) -> pl.LazyFrame:
         """
@@ -245,9 +245,7 @@ class MacroPipeBuiltins:
         lf = self._lf.with_columns(
             pl.concat_list(pl.col(*source_columns)).struct.json_encode().alias(target_column),
         )
-        if options and "drop=true" in options:
-            lf = lf.drop(*source_columns)
-        return lf
+        return self._drop_if_requested(lf, options, source_columns)
 
     def json_fields_to_columns(
         self,
@@ -265,18 +263,16 @@ class MacroPipeBuiltins:
 
         TODO: An advanced version could provide extracting individual columns with individual dtypes.
         """
-        lf = self._lf
         extract_columns = decode_list(extract_columns)
         dtype_real = pl.DataType.from_python(gettype(dtype))
+        lf = self._lf
         for extract_column in extract_columns:
             lf = lf.with_columns(
                 pl.col(source_column)
                 .str.json_decode(dtype=pl.Struct({extract_column: dtype_real}))
                 .struct.field(extract_column),
             )
-        if options and "drop=true" in options:
-            lf = lf.drop(source_column)
-        return lf
+        return self._drop_if_requested(lf, options, [source_column])
 
     def json_fields_to_wkt_point(
         self,
@@ -314,6 +310,4 @@ class MacroPipeBuiltins:
             .st.to_wkt()
             .alias(target_column)
         )
-        if options and "drop=true" in options:
-            lf = lf.drop(source_column)
-        return lf
+        return self._drop_if_requested(lf, options, [source_column])
