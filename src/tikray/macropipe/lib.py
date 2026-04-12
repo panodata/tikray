@@ -159,6 +159,20 @@ class MacroPipeBuiltins:
             lf = lf.drop(*column_names)
         return lf
 
+    def filter(self, sql: str) -> pl.LazyFrame:
+        """
+        Transform result by filtering records using SQL WHERE expression clauses.
+
+        https://docs.pola.rs/user-guide/sql/intro/
+        https://docs.pola.rs/user-guide/transformations/time-series/filter/
+        https://docs.pola.rs/api/python/stable/reference/expressions/api/polars.sql_expr.html
+
+        Input:  [{"ts": 1754784000000, "data": "foo"}, {"ts": 1754785000000, "data": "bar"}]
+        Recipe: "filter:ts < 1754785000000"
+        Output: [{"ts": 1754784000000, "data": "foo"}]
+        """
+        return self._lf.filter(pl.sql_expr(sql))
+
     def scale(self, column_name: str, factor: float) -> pl.LazyFrame:
         """
         Scale value in a single column by multiplying by a factor.

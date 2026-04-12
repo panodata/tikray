@@ -66,6 +66,25 @@ def test_format():
     assert_frame_equal(converted_frame, output_frame)
 
 
+def test_filter():
+    """
+    Validate the `filter` function.
+    """
+
+    csv = """
+timestamp,data
+1754784000000,foo
+1754785000000,bar
+        """.strip()
+    input_frame = pl.scan_csv(StringIO(csv))
+    output_frame = pl.LazyFrame({"timestamp": [1754784000000], "data": ["foo"]})
+    pipe = MacroPipe.from_recipes(
+        "filter:timestamp < 1754785000000",
+    )
+    converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(converted_frame.collect(), output_frame.collect())
+
+
 def test_apply_macropipe():
     """Validate MacroPipe's `apply` function."""
     input_frame = pl.LazyFrame({"value": [42.42]})
