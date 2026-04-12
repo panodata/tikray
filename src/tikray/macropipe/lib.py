@@ -1,10 +1,11 @@
-import ast
 import typing as t
 
-import orjson
 import polars as pl
 
-from tikray.macropipe.util import decode_list, gettype
+from tikray.macropipe.util import decode_list, gettype, to_json
+
+if t.TYPE_CHECKING:  # pragma: no cover
+    from tikray.macropipe import MacroPipe
 
 
 @pl.api.register_lazyframe_namespace("mp")
@@ -16,9 +17,16 @@ class MacroPipeBuiltins:
     def __init__(self, lf: pl.LazyFrame) -> None:
         self._lf = lf
 
-    def apply(self, pipe) -> pl.LazyFrame:
+    @staticmethod
+    def _drop_if_requested(lf: pl.LazyFrame, options: t.Optional[str], columns: t.List[str]) -> pl.LazyFrame:
+        """Drop columns when `drop=true` is present in the options string."""
+        if options and "drop=true" in options:
+            return lf.drop(*columns)
+        return lf
+
+    def apply(self, pipeline: "MacroPipe") -> pl.LazyFrame:
         """Convert transformation recipes to Polars expressions and apply to structured pipeline."""
-        return pipe.apply(self._lf)
+        return pipeline.apply(self._lf)
 
     def head(self, n: str) -> pl.LazyFrame:
         """
@@ -80,12 +88,9 @@ class MacroPipeBuiltins:
         Recipe: "cast:float,int,str:float"
         Output: {"float": 42.42, "int": 42.0, str: 42.0}
         """
-        lf = self._lf
         column_names = decode_list(column_names)
-        for column_name in column_names:
-            dtype_real = pl.DataType.from_python(gettype(dtype))
-            lf = lf.with_columns(pl.col(column_name).cast(dtype=dtype_real))
-        return lf
+        dtype_real = pl.DataType.from_python(gettype(dtype))
+        return self._lf.with_columns([pl.col(col).cast(dtype=dtype_real) for col in column_names])
 
     def select(self, column_names: t.Union[str, t.List[str]]) -> pl.LazyFrame:
         """
@@ -135,9 +140,7 @@ class MacroPipeBuiltins:
         """
         column_names = decode_list(column_names)
         lf = self._lf.with_columns(pl.concat_str(column_names, separator=separator).alias(target_column))
-        if options and "drop=true" in options:
-            lf = lf.drop(*column_names)
-        return lf
+        return self._drop_if_requested(lf, options, column_names)
 
     def format(
         self,
@@ -155,9 +158,7 @@ class MacroPipeBuiltins:
         """
         column_names = decode_list(column_names)
         lf = self._lf.with_columns(pl.format(f_string, *column_names).alias(target_column))
-        if options and "drop=true" in options:
-            lf = lf.drop(*column_names)
-        return lf
+        return self._drop_if_requested(lf, options, column_names)
 
     def filter(self, sql: str) -> pl.LazyFrame:
         """
@@ -191,7 +192,7 @@ class MacroPipeBuiltins:
         Recipe: "iso_to_unixtime:value"
         Output: {"value": 1772539932}
         """
-        return self._lf.with_columns(pl.col(column_name).dt.epoch(time_unit="s"))
+        return self._lf.with_columns(pl.col(column_name).str.to_datetime().dt.epoch(time_unit="s"))
 
     def unixtime_to_iso(self, column_name: str) -> pl.LazyFrame:
         """
@@ -201,7 +202,9 @@ class MacroPipeBuiltins:
         Recipe: "unixtime_to_iso:value"
         Output: {"value": "2026-03-03T12:12:12.000000"}
         """
-        return self._lf.with_columns(pl.from_epoch(pl.col(column_name)).dt.to_string(format="iso:strict"))
+        return self._lf.with_columns(
+            pl.from_epoch(pl.col(column_name), time_unit="s").dt.to_string(format="iso:strict")
+        )
 
     def json_array_to_wkt_point(self, col_name: str) -> pl.LazyFrame:
         """
@@ -223,9 +226,7 @@ class MacroPipeBuiltins:
         Recipe: "python_to_json:data"
         Output: {"data": '{"temperature": 42.42}'}
         """
-        return self._lf.with_columns(
-            pl.col(col_name).map_elements(lambda x: orjson.dumps(ast.literal_eval(x)).decode(), return_dtype=pl.String)
-        )
+        return self._lf.with_columns(pl.col(col_name).map_elements(to_json, return_dtype=pl.String))
 
     def columns_to_json_array(
         self, source_columns: t.Union[str, t.List[str]], target_column: str, options: t.Optional[str] = None
@@ -241,31 +242,31 @@ class MacroPipeBuiltins:
         lf = self._lf.with_columns(
             pl.concat_list(pl.col(*source_columns)).struct.json_encode().alias(target_column),
         )
-        if options and "drop=true" in options:
-            lf = lf.drop(*source_columns)
-        return lf
+        return self._drop_if_requested(lf, options, source_columns)
 
     def json_fields_to_columns(
-        self, source_column: str, extract_columns: t.Union[str, t.List[str]], options: t.Optional[str] = None
+        self,
+        source_column: str,
+        extract_columns: t.Union[str, t.List[str]],
+        dtype: str,
+        options: t.Optional[str] = None,
     ) -> pl.LazyFrame:
         """
         Extract JSON fields from single column into individual columns. Optionally drop the original column.
 
         Input:  {"data": '{"longitude": 9.757, "latitude": 47.389, "more": "anything"}'}
-        Recipe: "json_fields_to_columns:data:longitude,latitude:drop=true"
+        Recipe: "json_fields_to_columns:data:longitude,latitude:float:drop=true"
         Output: {"longitude": 9.757, "latitude": 47.389}
+
+        TODO: An advanced version could provide extracting individual columns with individual dtypes.
         """
-        lf = self._lf
         extract_columns = decode_list(extract_columns)
-        for extract_column in extract_columns:
-            lf = lf.with_columns(
-                pl.col(source_column)
-                .str.json_decode(dtype=pl.Struct({extract_column: pl.String}))
-                .struct.field(extract_column),
-            )
-        if options and "drop=true" in options:
-            lf = lf.drop(source_column)
-        return lf
+        dtype_real = pl.DataType.from_python(gettype(dtype))
+        # Decode once with all fields
+        struct_schema = dict.fromkeys(extract_columns, dtype_real)
+        decoded = pl.col(source_column).str.json_decode(dtype=pl.Struct(struct_schema))
+        lf = self._lf.with_columns(*(decoded.struct.field(col).alias(col) for col in extract_columns))
+        return self._drop_if_requested(lf, options, [source_column])
 
     def json_fields_to_wkt_point(
         self,
@@ -285,11 +286,22 @@ class MacroPipeBuiltins:
         """
         import polars_st as st
 
-        lf = self.json_fields_to_columns(source_column, [longitude_field, latitude_field])
-        lf = lf.with_columns(
-            st.point(pl.concat_arr(pl.col(longitude_field), pl.col(latitude_field))).st.to_wkt().alias(target_column),
+        decoded = pl.col(source_column).str.json_decode(
+            dtype=pl.Struct(
+                {
+                    longitude_field: pl.Float64,
+                    latitude_field: pl.Float64,
+                }
+            )
         )
-        lf = lf.drop(longitude_field, latitude_field)
-        if options and "drop=true" in options:
-            lf = lf.drop(source_column)
-        return lf
+        lf = self._lf.with_columns(
+            st.point(
+                pl.concat_arr(
+                    decoded.struct.field(longitude_field),
+                    decoded.struct.field(latitude_field),
+                )
+            )
+            .st.to_wkt()
+            .alias(target_column)
+        )
+        return self._drop_if_requested(lf, options, [source_column])

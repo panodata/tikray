@@ -35,16 +35,17 @@ timestamp,coordinates,data
         "python_to_json:data",
     )
     output_frame = pipe.apply(input_frame)
+    output_df = output_frame.collect()
 
     header("CSV example")
     print("Input: ", input_frame.collect())
-    print("Output:", output_frame.collect())
+    print("Output:", output_df)
     print()
     print("Input CSV:")
     print(input_data)
     print()
     print("Output CSV:")
-    print(output_frame.collect().write_csv(quote_style="non_numeric"))
+    print(output_df.write_csv(quote_style="non_numeric"))
     print()
 
 
@@ -62,13 +63,14 @@ def parquet_example():
         "select:passenger_count,trip_distance,fare_amount,tip_amount,total_amount",
     )
     output_frame = pipe.apply(input_frame)
+    output_df = output_frame.collect()
 
     header("Parquet example")
     print("Input: ", input_frame.collect())
-    print("Output:", output_frame.collect())
+    print("Output:", output_df)
     print()
     print("Output CSV:")
-    print(output_frame.collect().write_csv(quote_style="non_numeric"))
+    print(output_df.write_csv(quote_style="non_numeric"))
     print()
 
 

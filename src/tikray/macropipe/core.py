@@ -22,29 +22,27 @@ class MacroPipe:
     """A miniature transformation engine based on Polars."""
 
     expressions: t.List[str]
-    registry: t.ClassVar[Registry] = dataclasses.field(default=Registry())
+    registry: t.ClassVar[Registry] = Registry()
+    _reserved_mp_helpers: t.ClassVar[t.Set[str]] = {"apply"}
 
     @classmethod
     def from_recipes(cls, *recipes: str) -> "MacroPipe":
         """Create MacroPipe from list of recipes (textual macro commands)."""
         return cls(expressions=list(recipes))
 
-    def resolve_function(self, name: str, lf: pl.LazyFrame) -> t.Callable:
+    def resolve_function(self, name: str, lf: t.Optional[pl.LazyFrame] = None) -> t.Callable:
         """
         Resolve macro function either from extension or from user-registered function.
-
-        TODO: When using the second (else) code path, this function could make
-              the `lf` argument optional after reshuffling logic.
         """
-        function = getattr(lf.mp, name, None)  # type: ignore[attr-defined]
-        if function is not None:
+        mp_namespace = getattr(lf, "mp", None) if lf is not None else None
+        function = getattr(mp_namespace, name, None) if mp_namespace is not None else None
+        if callable(function) and not name.startswith("_") and name not in self._reserved_mp_helpers:
             # When invoking the extension function in the `lf.mp` namespace,
             # the procedure needs to strip away the first argument.
             return ignoreargs(function, 1)
-        else:
-            # When invoking a user-registered function,
-            # it can be invoked without further ado.
-            return self.registry.get(name)
+        # When invoking a user-registered function,
+        # it can be invoked without further ado.
+        return self.registry.get(name)
 
     @staticmethod
     def decode_expression(expression: str) -> t.Tuple[str, t.List[str]]:
@@ -56,8 +54,21 @@ class MacroPipe:
               Any suggestions are very much welcome.
         """
 
+        if not expression:
+            raise ValueError(f"Invalid MacroPipe expression: {expression!r}")
+
+        # Reject dangling trailing escapes before tokenization.
+        # A malformed expression ending with an unmatched backslash silently loses
+        # data during tokenization (e.g., concat:a:\ tokenizes to ['concat', 'a']
+        # with the final \ dropped), which leads to confusing downstream behaviour.
+        trailing_backslashes = len(expression) - len(expression.rstrip("\\"))
+        if trailing_backslashes % 2:
+            raise ValueError(f"Invalid MacroPipe expression: {expression!r}")
+
         # Tokenize by colons but read escaped colons literally.
         tokens = re.findall(r"(?:[^:\\]|\\.)+", expression)
+        if not tokens:
+            raise ValueError(f"Invalid MacroPipe expression: {expression!r}")
         function_name, *args = tokens
         args = [a.replace("\\:", ":") for a in args]
 

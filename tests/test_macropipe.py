@@ -1,3 +1,4 @@
+import re
 from io import StringIO
 
 import polars as pl
@@ -5,6 +6,112 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from tikray.macropipe import MacroPipe, recipe
+from tikray.macropipe.lib import MacroPipeBuiltins
+from tikray.macropipe.registry import Registry
+from tikray.macropipe.util import decode_list, gettype, to_json
+
+
+@pytest.fixture(autouse=True)
+def _restore_registry():
+    """Isolate global Registry mutations to keep tests order-independent."""
+    snapshot = Registry.r.copy()
+    yield
+    Registry.r = snapshot
+
+
+def test_util_gettype():
+    """Validate the `gettype` utility function."""
+
+    assert gettype("str") is str
+    assert gettype("float") is float
+
+    with pytest.raises(ValueError) as excinfo:
+        gettype("Hotzenplotz")
+    assert excinfo.match("Symbol does not exist: Hotzenplotz")
+
+    with pytest.raises(ValueError) as excinfo:
+        gettype("print")
+    assert excinfo.match("Resolved symbol is not a Python type: print")
+
+
+def test_util_decode_list():
+    """Validate the `decode_list` utility function."""
+    assert decode_list("a,b") == ["a", "b"]
+    assert decode_list(["a", "b"]) == ["a", "b"]
+
+
+def test_util_to_json():
+    """Validate the `to_json` utility function."""
+    assert to_json(None) is None
+    assert to_json("{'foo': 'bar'}") == '{"foo":"bar"}'
+    assert to_json("Hotzenplotz") is None
+    with pytest.raises(ValueError) as excinfo:
+        to_json("Hotzenplotz", strict=True)
+    assert excinfo.match("malformed")
+
+
+def test_registry_register():
+    """Validate the recipe function registry."""
+
+    # Register a function manually.
+    def fun():
+        pass
+
+    Registry.register(fun)
+    assert Registry.get("fun") == fun
+
+    # Registering a function twice should fail.
+    with pytest.raises(ValueError) as excinfo:
+        Registry.register(fun)
+    assert excinfo.match("MacroPipe function already registered: fun")
+
+
+def test_core_decode_expression_success():
+    """Validate the `decode_expression` core method."""
+    assert MacroPipe.decode_expression("foo") == ("foo", [])
+    assert MacroPipe.decode_expression("foo:bar") == ("foo", ["bar"])
+
+
+def test_core_decode_expression_errors():
+    """
+    Validate error cases of the `decode_expression` core method.
+
+    Avoid uncaught unpacking errors when expression is empty or delimiter-only.
+    """
+
+    # Empty expression.
+    with pytest.raises(ValueError) as excinfo:
+        MacroPipe.decode_expression(None)
+    assert excinfo.match("Invalid MacroPipe expression: None")
+
+    with pytest.raises(ValueError) as excinfo:
+        MacroPipe.decode_expression("")
+    assert excinfo.match("Invalid MacroPipe expression: ")
+
+    # Delimiter-only expression.
+    with pytest.raises(ValueError) as excinfo:
+        MacroPipe.decode_expression(":::")
+    assert excinfo.match("Invalid MacroPipe expression: ':::'")
+
+    # Dangling trailing escapes.
+    with pytest.raises(ValueError) as excinfo:
+        MacroPipe.decode_expression("concat:a:\\")
+    assert excinfo.match(re.escape(r"Invalid MacroPipe expression: 'concat:a:\\'"))
+
+
+def test_lib_drop_if_requested():
+    """Validate the `_drop_if_requested` lib helper function."""
+
+    # Without drop.
+    input_frame = pl.LazyFrame({"value": [42.42], "b": ["unknown"]})
+    converted_frame = MacroPipeBuiltins._drop_if_requested(input_frame, "", ["b", "c"])
+    assert_frame_equal(converted_frame, input_frame)
+
+    # With drop.
+    input_frame = pl.LazyFrame({"value": [42.42], "b": ["unknown"], "c": ["unknown"]})
+    output_frame = pl.LazyFrame({"value": [42.42]})
+    converted_frame = MacroPipeBuiltins._drop_if_requested(input_frame, "drop=true", ["b", "c"])
+    assert_frame_equal(converted_frame, output_frame)
 
 
 def test_head():
@@ -122,6 +229,20 @@ def test_apply_extension():
     )
     # Invoke `apply` on the `mp` namespace of the `LazyFrame` instance.
     converted_frame = input_frame.mp.apply(pipe)
+    assert_frame_equal(converted_frame, output_frame)
+
+
+def test_user_recipe_named_apply_uses_registry_fallback():
+    """Verify `MacroPipe._reserved_mp_helpers`."""
+
+    @recipe
+    def apply(lf: pl.LazyFrame, column_name: str) -> pl.LazyFrame:
+        return lf.with_columns(pl.lit("ok").alias(column_name))
+
+    input_frame = pl.LazyFrame({"value": [1]})
+    output_frame = pl.LazyFrame({"value": ["ok"]})
+    pipe = MacroPipe.from_recipes("apply:value")
+    converted_frame = pipe.apply(input_frame)
     assert_frame_equal(converted_frame, output_frame)
 
 
@@ -353,9 +474,9 @@ timestamp,data
     """.strip()
     input_frame = pl.scan_csv(StringIO(csv), quote_char="'")
     pipe = MacroPipe.from_recipes(
-        "json_fields_to_columns:data:longitude,latitude:drop=true",
+        "json_fields_to_columns:data:longitude,latitude:float:drop=true",
     )
-    output_frame = pl.LazyFrame({"timestamp": [1754784000000], "longitude": ["9.757"], "latitude": ["47.389"]})
+    output_frame = pl.LazyFrame({"timestamp": [1754784000000], "longitude": [9.757], "latitude": [47.389]})
     converted_frame = pipe.apply(input_frame)
     assert_frame_equal(converted_frame, output_frame)
 

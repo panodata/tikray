@@ -2,18 +2,23 @@ import typing as t
 
 
 class Registry:
-    """Function registry for MacroPipe."""
+    """MacroPipe function registry"""
 
-    r: t.Dict[str, t.Callable] = {}
+    r: t.ClassVar[t.Dict[str, t.Callable]] = {}
 
     @classmethod
     def register(cls, fn: t.Callable) -> None:
+        """Register a MacroPipe recipe function."""
+        if fn.__name__ in cls.r:
+            raise ValueError(f"MacroPipe function already registered: {fn.__name__}")
         cls.r[fn.__name__] = fn
 
-    def get(self, name):
-        if name not in self.r:
+    @classmethod
+    def get(cls, name: str) -> t.Callable:
+        """Get a MacroPipe recipe function by name."""
+        if name not in cls.r:
             raise NotImplementedError(f"MacroPipe function not implemented: {name}")
-        return self.r[name]
+        return cls.r[name]
 
 
 def recipe(function: t.Callable) -> t.Callable:
