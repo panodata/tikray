@@ -4,10 +4,7 @@ A small macro language on top of Polars.
 This pipeline wrapper uses macro-like commands / a textual expression language,
 that uses Polars pipes to apply compiled UDFs to a LazyFrame in a structured way.
 
-https://docs.pola.rs/api/python/stable/reference/lazyframe/api/polars.LazyFrame.pipe.html
-https://peps.python.org/pep-0638/
-https://www.linkedin.com/pulse/dsls-llms-ken-kocienda-fpi1c
-https://discuss.python.org/t/functools-pipe-function-composition-utility/69744
+https://tikray.readthedocs.io/engine/polars/
 """
 
 import dataclasses
