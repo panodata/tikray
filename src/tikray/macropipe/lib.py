@@ -219,6 +219,10 @@ class MacroPipeBuiltins:
         """
         Convert Python-encoded dictionary into pure JSON.
 
+        Note: The `python_to_json` method uses `ast.literal_eval()` which, while safer
+              than `eval()`, still parses arbitrary Python literal expressions from
+              input data. Additionally, `map_elements` disables Polars' parallelization.
+
         Input:  {"data": "{'temperature': 42.42}"}
         Recipe: "python_to_json:data"
         Output: {"data": '{"temperature": 42.42}'}
@@ -246,21 +250,28 @@ class MacroPipeBuiltins:
         return lf
 
     def json_fields_to_columns(
-        self, source_column: str, extract_columns: t.Union[str, t.List[str]], options: t.Optional[str] = None
+        self,
+        source_column: str,
+        extract_columns: t.Union[str, t.List[str]],
+        dtype: str,
+        options: t.Optional[str] = None,
     ) -> pl.LazyFrame:
         """
         Extract JSON fields from single column into individual columns. Optionally drop the original column.
 
         Input:  {"data": '{"longitude": 9.757, "latitude": 47.389, "more": "anything"}'}
-        Recipe: "json_fields_to_columns:data:longitude,latitude:drop=true"
+        Recipe: "json_fields_to_columns:data:longitude,latitude:float:drop=true"
         Output: {"longitude": 9.757, "latitude": 47.389}
+
+        TODO: An advanced version could provide extracting individual columns with individual dtypes.
         """
         lf = self._lf
         extract_columns = decode_list(extract_columns)
+        dtype_real = pl.DataType.from_python(gettype(dtype))
         for extract_column in extract_columns:
             lf = lf.with_columns(
                 pl.col(source_column)
-                .str.json_decode(dtype=pl.Struct({extract_column: pl.String}))
+                .str.json_decode(dtype=pl.Struct({extract_column: dtype_real}))
                 .struct.field(extract_column),
             )
         if options and "drop=true" in options:
@@ -285,11 +296,24 @@ class MacroPipeBuiltins:
         """
         import polars_st as st
 
-        lf = self.json_fields_to_columns(source_column, [longitude_field, latitude_field])
-        lf = lf.with_columns(
-            st.point(pl.concat_arr(pl.col(longitude_field), pl.col(latitude_field))).st.to_wkt().alias(target_column),
+        decoded = pl.col(source_column).str.json_decode(
+            dtype=pl.Struct(
+                {
+                    longitude_field: pl.Float64,
+                    latitude_field: pl.Float64,
+                }
+            )
         )
-        lf = lf.drop(longitude_field, latitude_field)
+        lf = self._lf.with_columns(
+            st.point(
+                pl.concat_arr(
+                    decoded.struct.field(longitude_field),
+                    decoded.struct.field(latitude_field),
+                )
+            )
+            .st.to_wkt()
+            .alias(target_column)
+        )
         if options and "drop=true" in options:
             lf = lf.drop(source_column)
         return lf

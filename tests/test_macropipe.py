@@ -6,7 +6,7 @@ import pytest
 from polars.testing import assert_frame_equal
 
 from tikray.macropipe import MacroPipe, recipe
-from tikray.macropipe.util import gettype
+from tikray.macropipe.util import decode_list, gettype
 
 
 def test_util_gettype():
@@ -16,6 +16,12 @@ def test_util_gettype():
     with pytest.raises(ValueError) as excinfo:
         gettype("Hotzenplotz")
     assert excinfo.match("Unknown dtype name: Hotzenplotz")
+
+
+def test_util_decode_list():
+    """Validate the `decode_list` utility function."""
+    assert decode_list("a,b") == ["a", "b"]
+    assert decode_list(["a", "b"]) == ["a", "b"]
 
 
 def test_core_decode_expression_success():
@@ -397,9 +403,9 @@ timestamp,data
     """.strip()
     input_frame = pl.scan_csv(StringIO(csv), quote_char="'")
     pipe = MacroPipe.from_recipes(
-        "json_fields_to_columns:data:longitude,latitude:drop=true",
+        "json_fields_to_columns:data:longitude,latitude:float:drop=true",
     )
-    output_frame = pl.LazyFrame({"timestamp": [1754784000000], "longitude": ["9.757"], "latitude": ["47.389"]})
+    output_frame = pl.LazyFrame({"timestamp": [1754784000000], "longitude": [9.757], "latitude": [47.389]})
     converted_frame = pipe.apply(input_frame)
     assert_frame_equal(converted_frame, output_frame)
 

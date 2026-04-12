@@ -71,7 +71,7 @@ pip install --upgrade 'tikray[macropipe]'
 
 ## Synopsis
 
-Read from data source, apply transformations, and write to data sink,
+Read from data source, apply transformation, and write to data sink,
 in four lines of code.
 
 ```python
@@ -79,7 +79,7 @@ import polars as pl
 from tikray.macropipe import MacroPipe
 
 # Define transformation pipeline.
-pipeline = MacroPipe.from_recipes("hello", "world")
+pipeline = MacroPipe.from_recipes("head:30")
 
 # Invoke pipeline and inspect result.
 lf = pl.scan_csv("example.csv")
@@ -144,12 +144,12 @@ timestamp,coordinates,data
 In this case, you need to perform two transformation steps.
 
 - Convert coordinates in JSON list format to WKT POINT format.
-  ```
+  ```text
   Input:  [9.757, 47.389]
   Output: POINT( 9.757 47.389 )
   ```
 - Convert the data dictionary encoded in proprietary Python format into standard JSON format.
-  ```
+  ```text
   Input:  {'temperature': 42.42, 'humidity': 84.84}
   Output: {"temperature": 42.42, "humidity": 84.84}
   ```
@@ -202,7 +202,6 @@ shape: (1, 3)
 1754784000000,"POINT (9.757 47.389)","{""temperature"":42.42,""humidity"":84.84}"
 ```
 
-
 ## Parquet example
 
 :::{rubric} Usage
@@ -225,7 +224,7 @@ pipeline = MacroPipe.from_recipes(
     "select:passenger_count,trip_distance,fare_amount,tip_amount,total_amount",
 )
 
-# Read CSV data.
+# Read Parquet data.
 lf = pl.scan_parquet("https://cdn.crate.io/downloads/datasets/cratedb-datasets/timeseries/yc.2019.07-tiny.parquet")
 
 # Apply transformation pipeline and compute the result.
