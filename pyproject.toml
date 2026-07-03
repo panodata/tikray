@@ -106,7 +106,7 @@ dependencies = [
   "rsonpy<0.2",
   "toolz<2",
   "tqdm<5",
-  "transon==0.1.4",
+  "transon==0.1.6",
 ]
 optional-dependencies.develop = [
   "mypy<2.2",
