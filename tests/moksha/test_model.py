@@ -69,9 +69,12 @@ def test_moksha_transformation_error_jq_map(caplog):
     moksha = MokshaTransformation().jq(".foo")
     with pytest.raises(ValueError) as ex:
         moksha.apply(map(lambda x: x, ["foo"]))  # noqa: C417
-    assert ex.match(re.escape('Cannot index array with string "foo"'))
+    assert ex.match(r'Cannot index array with string \(?"foo"\)?')
 
-    assert 'Error evaluating rule: Cannot index array with string "foo". Expression: .foo' in caplog.messages
+    assert (
+        'Error evaluating rule: Cannot index array with string "foo". Expression: .foo' in caplog.messages
+        or 'Error evaluating rule: Cannot index array with string ("foo"). Expression: .foo' in caplog.messages
+    )
     assert "Error payload:\n[]" in caplog.messages
 
 
