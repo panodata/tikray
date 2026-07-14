@@ -136,27 +136,22 @@ optional-dependencies.test = [
   "pytest-cov<8",
   "pytest-mock<4",
 ]
-
 urls.Changelog = "https://tikray.readthedocs.io/changes.html"
 urls.Documentation = "https://tikray.readthedocs.io/"
 urls.Homepage = "https://tikray.readthedocs.io/"
 urls.Issues = "https://github.com/panodata/tikray/issues"
 urls.Repository = "https://github.com/panodata/tikray"
-
 scripts.tikray = "tikray.cli:cli"
 
-[tool.setuptools.package-data]
-tikray = [ "*.jq" ]
+[tool.setuptools]
+package-data.tikray = [ "*.jq" ]
 
 [tool.black]
 line-length = 120
 
 [tool.ruff]
 line-length = 120
-
-extend-exclude = [
-]
-
+extend-exclude = []
 lint.select = [
   # Builtins
   "A",
@@ -184,7 +179,6 @@ lint.select = [
   # flake8-2020
   "YTT",
 ]
-
 lint.extend-ignore = [
   # zip() without an explicit strict= parameter
   "B905",
@@ -195,62 +189,13 @@ lint.extend-ignore = [
   # Probable insecure usage of temporary file or directory
   "S108",
 ]
-
 lint.per-file-ignores."examples/*" = [
   "ERA001", # Found commented-out code
   "T201",   # Allow `print`
   "T203",   # Allow `pprint`
 ]
-
 lint.per-file-ignores."tests/*" = [
   "S101", # Allow use of `assert`, and `print`.
-]
-
-[tool.pytest.ini_options]
-addopts = """
-  -rfEXs -p pytester --strict-markers --verbosity=3
-  --cov --cov-report=term-missing --cov-report=xml
-  """
-minversion = "2.0"
-log_level = "DEBUG"
-log_cli_level = "DEBUG"
-log_format = "%(asctime)-15s [%(name)-36s] %(levelname)-8s: %(message)s"
-pythonpath = [
-  "src",
-]
-testpaths = [
-  "examples",
-  "tests",
-  "tikray",
-]
-python_files = [
-  "test_*.py",
-  "*_test.py",
-]
-xfail_strict = true
-markers = [
-  "tasmota",
-  "wemos",
-]
-
-[tool.coverage.paths]
-source = [
-  "src/",
-]
-
-[tool.coverage.run]
-branch = false
-omit = [
-  "tests/*",
-  "src/tikray/util/dictx.py",
-]
-
-[tool.coverage.report]
-fail_under = 0
-show_missing = true
-exclude_lines = [
-  "# pragma: no cover",
-  "raise NotImplemented",
 ]
 
 [tool.mypy]
@@ -258,65 +203,100 @@ mypy_path = "src"
 packages = [
   "tikray",
 ]
-exclude = [
-]
-check_untyped_defs = true
+exclude = []
+namespace_packages = true
 explicit_package_bases = true
 ignore_missing_imports = true
+check_untyped_defs = true
 implicit_optional = true
-install_types = true
-namespace_packages = true
-non_interactive = true
 # Needed until `mypy-0.990` for `ConverterDefinition` in `converter.py`.
 # https://github.com/python/mypy/issues/731#issuecomment-1260976955
 # enable_recursive_aliases = true
+install_types = true
+non_interactive = true
 
-[tool.versioningit.vcs]
-method = "git-archive"
-default-tag = "v0.0.0"
-describe-subst = "$Format:%(describe:tags,match=v*)$"
+[tool.pytest]
+ini_options.minversion = "2.0"
+ini_options.testpaths = [
+  "examples",
+  "tests",
+  "tikray",
+]
+ini_options.pythonpath = [
+  "src",
+]
+ini_options.python_files = [
+  "*_test.py",
+  "test_*.py",
+]
+ini_options.addopts = """
+  -rfEXs -p pytester --strict-markers --verbosity=3
+  --cov --cov-report=term-missing --cov-report=xml
+  """
+ini_options.markers = [
+  "tasmota",
+  "wemos",
+]
+ini_options.xfail_strict = true
+ini_options.log_format = "%(asctime)-15s [%(name)-36s] %(levelname)-8s: %(message)s"
+ini_options.log_level = "DEBUG"
+ini_options.log_cli_level = "DEBUG"
 
+[tool.coverage]
+run.branch = false
+run.omit = [
+  "src/tikray/util/dictx.py",
+  "tests/*",
+]
+paths.source = [
+  "src/",
+]
+report.exclude_lines = [
+  "# pragma: no cover",
+  "raise NotImplemented",
+]
+report.fail_under = 0
+report.show_missing = true
+
+[tool.poe]
 # ===================
 # Tasks configuration
 # ===================
-
-[tool.poe.tasks]
-
-check = [
+tasks.check = [
   "lint",
   "test",
 ]
-
-docs-autobuild = [
+tasks.docs-autobuild = [
   { cmd = "sphinx-autobuild --open-browser --watch src docs docs/_build" },
 ]
-docs-html = [
+tasks.docs-html = [
   { cmd = "sphinx-build -W --keep-going docs docs/_build" },
 ]
-docs-linkcheck = [
+tasks.docs-linkcheck = [
   { cmd = "sphinx-build -W --keep-going -b linkcheck docs docs/_build" },
 ]
-
-format = [
+tasks.format = [
   { cmd = "ruff format ." },
   # Configure Ruff not to auto-fix (remove!):
   # unused imports (F401), unused variables (F841), `print` statements (T201), and commented-out code (ERA001).
   { cmd = "ruff check --fix --ignore=ERA --ignore=F401 --ignore=F841 --ignore=T20 --ignore=ERA001 ." },
   { cmd = "pyproject-fmt --keep-full-version pyproject.toml" },
 ]
-
-lint = [
+tasks.lint = [
   { cmd = "ruff format --check ." },
   { cmd = "ruff check ." },
   { cmd = "validate-pyproject pyproject.toml" },
   { cmd = "mypy" },
 ]
-
-release = [
+tasks.release = [
   { cmd = "python -m build" },
   { cmd = "twine upload --skip-existing dist/*" },
 ]
-
-test = [
+tasks.test = [
   { cmd = "pytest" },
 ]
+
+[tool.versioningit]
+vcs.method = "git-archive"
+vcs.default-tag = "v0.0.0"
+vcs.describe-subst = "$Format:%(describe:tags,match=v*)$"
