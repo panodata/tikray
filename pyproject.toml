@@ -109,10 +109,10 @@ dependencies = [
   "transon<0.3",
 ]
 optional-dependencies.develop = [
-  "mypy<2.4",
   "poethepoet<1",
   "pyproject-fmt<3",
   "ruff<0.17",
+  "ty==0.0.78",
   "validate-pyproject>=0.23,<1",
 ]
 optional-dependencies.docs = [
@@ -198,23 +198,6 @@ lint.per-file-ignores."tests/*" = [
   "S101", # Allow use of `assert`, and `print`.
 ]
 
-[tool.mypy]
-mypy_path = "src"
-packages = [
-  "tikray",
-]
-exclude = []
-namespace_packages = true
-explicit_package_bases = true
-ignore_missing_imports = true
-check_untyped_defs = true
-implicit_optional = true
-# Needed until `mypy-0.990` for `ConverterDefinition` in `converter.py`.
-# https://github.com/python/mypy/issues/731#issuecomment-1260976955
-# enable_recursive_aliases = true
-install_types = true
-non_interactive = true
-
 [tool.pytest]
 ini_options.minversion = "2.0"
 ini_options.testpaths = [
@@ -243,19 +226,19 @@ ini_options.log_level = "DEBUG"
 ini_options.log_cli_level = "DEBUG"
 
 [tool.coverage]
-run.branch = false
 run.omit = [
   "src/tikray/util/dictx.py",
   "tests/*",
 ]
+run.branch = false
 paths.source = [
   "src/",
 ]
+report.fail_under = 0
 report.exclude_lines = [
   "# pragma: no cover",
   "raise NotImplemented",
 ]
-report.fail_under = 0
 report.show_missing = true
 
 [tool.poe]
@@ -286,7 +269,7 @@ tasks.lint = [
   { cmd = "ruff format --check ." },
   { cmd = "ruff check ." },
   { cmd = "validate-pyproject pyproject.toml" },
-  { cmd = "mypy" },
+  { cmd = "ty check src/tikray tests examples" },
 ]
 tasks.release = [
   { cmd = "python -m build" },

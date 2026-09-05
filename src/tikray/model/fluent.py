@@ -1,6 +1,6 @@
 import typing as t
 
-from attrs import define
+from attrs import define, field
 
 from tikray.model.bucket import ConverterBase
 from tikray.model.moksha import MokshaRule
@@ -8,7 +8,7 @@ from tikray.model.moksha import MokshaRule
 
 @define
 class FluentTransformation(ConverterBase):
-    rules = t.List[t.Any]
+    rules: t.List = field(factory=list)
 
     def jmes(self, expression) -> "FluentTransformation":
         self._add_rule(MokshaRule(type="jmes", expression=expression))

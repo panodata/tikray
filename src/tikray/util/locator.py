@@ -10,7 +10,10 @@ not_found = object()
 
 
 def swap_node(
-    pointer: JsonPointer, value: t.Any, fun: t.Callable = None, on_error: t.Literal["ignore", "raise"] = "ignore"
+    pointer: JsonPointer,
+    value: t.Any,
+    fun: t.Optional[t.Callable] = None,
+    on_error: t.Literal["ignore", "raise"] = "ignore",
 ) -> t.Union[JsonPointer, None]:
     node = pointer.resolve(value, not_found)
     if node is not_found:

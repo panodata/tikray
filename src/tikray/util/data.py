@@ -70,7 +70,7 @@ def lines_in_file(fname: t.Union[str, Path]) -> int:
     return count
 
 
-def to_list(x: t.Any, default: t.List[t.Any] = None) -> t.Union[t.List[t.Any], None]:
+def to_list(x: t.Any, default: t.Optional[t.List[t.Any]] = None) -> t.Union[t.List[t.Any], None]:
     if x is None:
         return default
     if not isinstance(x, t.Iterable) or isinstance(x, str):
