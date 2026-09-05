@@ -328,5 +328,5 @@ def test_moksha_empty():
     assert ex.match("rson expression cannot be empty")
 
     with pytest.raises(ValueError) as ex:
-        MokshaTransformation().transon("")
+        MokshaTransformation().transon("")  # ty: ignore[invalid-argument-type]
     assert ex.match("transon expression cannot be empty")

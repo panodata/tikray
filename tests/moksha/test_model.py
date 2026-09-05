@@ -91,5 +91,5 @@ def test_moksha_transformation_empty():
     assert ex.match("jq expression cannot be empty")
 
     with pytest.raises(ValueError) as ex:
-        MokshaTransformation().transon("")
+        MokshaTransformation().transon("")  # ty: ignore[invalid-argument-type]
     assert ex.match("transon expression cannot be empty")

@@ -3,7 +3,7 @@ import logging
 import typing as t
 
 import jmespath
-import jq
+import jq  # ty: ignore[unresolved-import]
 import jsonpointer
 import transon
 from attr import Factory
@@ -52,7 +52,7 @@ class ConverterBase:
 @define
 class ValueConverterRule(ConverterRuleBase):
     pointer: str
-    transformer: str
+    transformer: t.Union[str, t.Callable[..., t.Any]]
     args: t.Union[t.List[t.Any], None] = Factory(list)
     disabled: t.Optional[bool] = False
 
@@ -89,7 +89,11 @@ class ValueConverter(ConverterBase):
     _runtime_rules: t.List[ValueConverterRuntimeRule] = Factory(list)
 
     def add(
-        self, pointer: str, transformer: str, args: t.List[t.Any] = None, disabled: bool = False
+        self,
+        pointer: str,
+        transformer: t.Union[str, t.Callable[..., t.Any]],
+        args: t.Optional[t.List[t.Any]] = None,
+        disabled: t.Optional[bool] = False,
     ) -> "ValueConverter":
         self._add_rule(ValueConverterRule(pointer=pointer, transformer=transformer, args=args, disabled=disabled))
         return self

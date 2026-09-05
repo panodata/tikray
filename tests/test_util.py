@@ -1,7 +1,8 @@
 from pathlib import Path
+from typing import cast
 
 import jmespath
-import jq
+import jq  # ty: ignore[unresolved-import]
 import jsonpointer
 import orjsonl
 import pytest
@@ -23,35 +24,39 @@ def test_to_pointer_jsonpointer():
 
 def test_to_pointer_none():
     with pytest.raises(TypeError) as ex:
-        to_pointer(None)
+        to_pointer(None)  # ty: ignore[invalid-argument-type]
     assert ex.match("Value is not of type str or JsonPointer: NoneType")
 
 
 def test_to_pointer_int():
     with pytest.raises(TypeError) as ex:
-        to_pointer(42)
+        to_pointer(42)  # ty: ignore[invalid-argument-type]
     assert ex.match("Value is not of type str or JsonPointer: int")
 
 
 def test_compile_expression_jmes():
-    transformer: jmespath.parser.ParsedResult = compile_expression(type="jmes", expression="@")
+    transformer: jmespath.parser.ParsedResult = cast(
+        jmespath.parser.ParsedResult, compile_expression(type="jmes", expression="@")
+    )
     assert transformer.expression == "@"
     assert transformer.parsed == {"type": "current", "children": []}
 
 
 def test_compile_expression_jq():
-    transformer: jq._Program = compile_expression(type="jq", expression=".")
+    transformer: jq._Program = cast(jq._Program, compile_expression(type="jq", expression="."))
     assert transformer.program_string.endswith(".")
 
 
 def test_compile_expression_transon():
-    transformer: transon.Transformer = compile_expression(type="transon", expression={"$": "this"})
+    transformer: transon.Transformer = cast(
+        transon.Transformer, compile_expression(type="transon", expression={"$": "this"})
+    )
     assert transformer.template == {"$": "this"}
 
 
 def test_compile_expression_unknown():
     with pytest.raises(TypeError) as ex:
-        compile_expression(type="foobar", expression=None)
+        compile_expression(type="foobar", expression=None)  # ty: ignore[invalid-argument-type]
     assert ex.match("Compilation failed. Type must be one of .+: foobar")
 
 
@@ -60,7 +65,9 @@ def test_load_jsonl_by_suffix(tmp_path: Path, input_: str):
     # Prepare.
     data = load_json(Path(input_))
     tmp_path = tmp_path / "testdrive.jsonl"
-    orjsonl.save(tmp_path, to_list(data))
+    data_save = to_list(data)
+    assert data_save is not None, "Data is empty"
+    orjsonl.save(tmp_path, data_save)
 
     # Validate.
     assert list(load_json(tmp_path)) == to_list(data)
