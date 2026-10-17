@@ -111,7 +111,7 @@ dependencies = [
 optional-dependencies.develop = [
   "poethepoet<1",
   "pyproject-fmt<3",
-  "ruff<0.17",
+  "ruff==0.17.*",
   "ty==0.0.86",
   "validate-pyproject>=0.23,<1",
 ]
