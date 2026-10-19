@@ -59,8 +59,6 @@ yaml_converter = make_yaml_converter(dict_factory=OrderedDict, structure_fallbac
 
 @define
 class Dumpable:
-    meta: t.Union[Metadata, None] = None
-
     def to_dict(self) -> t.Dict[str, t.Any]:
         def filter_(key, value):
             return all(toolz.juxt(no_privates_no_nulls_no_empties, no_disabled_false)(key, value))
