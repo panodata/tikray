@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+- Verified support for Python 3.15
 
 ## 2026/02/11 v0.3.2
 - Updated requirements across the board:
