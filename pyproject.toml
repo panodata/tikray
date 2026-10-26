@@ -101,7 +101,7 @@ dependencies = [
   "jsonpointer<4",
   "orjson<4",
   "orjsonl<2",
-  "python-dateutil<2.10",
+  "python-dateutil<3.1",
   "pyyaml<7",
   "rsonpy<0.2",
   "toolz<2",
