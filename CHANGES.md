@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## 2026/11/04 v0.3.3
 - Verified support for Python 3.15
 
 ## 2026/02/11 v0.3.2
