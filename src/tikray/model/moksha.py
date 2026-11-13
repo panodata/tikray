@@ -3,7 +3,7 @@ import logging
 import typing as t
 
 import jmespath
-import jq  # ty: ignore[unresolved-import]
+import jq  # ty: ignore[import-not-found]
 import transon
 from attr import Factory
 from attrs import define

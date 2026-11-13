@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import cast
 
 import jmespath
-import jq  # ty: ignore[unresolved-import]
+import jq  # ty: ignore[import-not-found]
 import jsonpointer
 import orjsonl
 import pytest

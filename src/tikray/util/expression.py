@@ -5,14 +5,14 @@ from tikray.util.rson import RsonTransformer
 if sys.version_info >= (3, 10):
     from importlib.resources import files as resource_files
 else:  # pragma: no cover
-    from importlib_resources import (  # ty: ignore[unresolved-import,unused-ignore-comment,unused-ignore-comment]
+    from importlib_resources import (  # ty: ignore[import-not-found,unused-ignore-comment,unused-ignore-comment]
         files as resource_files,
     )
 
 import typing as t
 
 import jmespath
-import jq  # ty: ignore[unresolved-import]
+import jq  # ty: ignore[import-not-found]
 import transon
 
 from tikray.model.bucket import MokshaTransformer, TransonTemplate
